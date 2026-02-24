@@ -94,18 +94,18 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
             )}
         >
             {/* Glassy Background Decoration */}
-            <div className="absolute top-0 right-[5%] w-[60%] h-full pointer-events-none z-0 opacity-40 overflow-hidden flex items-center justify-center">
+            <div className="absolute top-[-20%] right-[-30%] md:right-[-40%] lg:right-[-50%] w-[120%] md:w-[150%] h-[150%] pointer-events-none z-0 opacity-40 flex items-center justify-center">
                 <DiagonalGallery
                     lane1={lane1Images}
                     lane2={lane2Images}
-                    className="!h-[150%] !w-full"
+                    className="!h-[180%] !w-[180%]"
                 />
             </div>
 
             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent pointer-events-none z-1" />
 
-            <div className="w-full px-8 md:px-16 relative z-10">
-                <div className="w-full max-w-[450px] md:max-w-[600px]">
+            <div className="w-full h-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center">
+                <div className="w-full max-w-[450px] md:max-w-[550px]">
 
                     {/* Eyebrow + Heading */}
                     <motion.div

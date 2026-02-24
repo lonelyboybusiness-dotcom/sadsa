@@ -14,14 +14,14 @@ const ScrollColumn = ({ speed = 20, reverse = false, images: baseImages = [] }: 
 
   // Triple items for extremely smooth infinite scroll
   const images = [...baseImages, ...baseImages, ...baseImages];
-  const itemHeight = 300; // base height
-  const gap = 128; // gap-32 (128px)
+  const itemHeight = 400; // base height
+  const gap = 26; // gap-[26px]
   const totalHeight = (itemHeight + gap) * baseImages.length;
 
   return (
-    <div className="flex flex-col gap-32 relative">
+    <div className="flex flex-col gap-[26px] relative">
       <motion.div
-        className="flex flex-col gap-32"
+        className="flex flex-col gap-[26px]"
         animate={{
           y: reverse ? [-totalHeight, 0] : [0, -totalHeight],
         }}
@@ -37,7 +37,7 @@ const ScrollColumn = ({ speed = 20, reverse = false, images: baseImages = [] }: 
         {images.map((src, index) => (
           <div
             key={index}
-            className="w-[240px] h-[240px] md:w-[300px] md:h-[300px] flex-shrink-0 rounded-[1.25rem] overflow-hidden shadow-2xl relative group"
+            className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] flex-shrink-0 rounded-[1.25rem] overflow-hidden shadow-2xl relative group"
           >
             <img
               src={src}
@@ -55,8 +55,8 @@ const ScrollColumn = ({ speed = 20, reverse = false, images: baseImages = [] }: 
 
 const DiagonalGallery = ({ className, lane1, lane2 }: DiagonalGalleryProps) => {
   return (
-    <div className={clsx("relative w-full h-[120vh] overflow-hidden flex justify-center gap-16", className)}>
-      <div className="flex gap-16 transform rotate-[25deg] scale-125 origin-center">
+    <div className={clsx("relative w-full h-[120vh] overflow-hidden flex justify-center gap-8 md:gap-24 lg:gap-32", className)}>
+      <div className="flex gap-8 md:gap-24 lg:gap-32 transform rotate-[25deg] scale-125 origin-center">
         <ScrollColumn speed={160} images={lane1} />
         <ScrollColumn speed={140} reverse images={lane2} />
       </div>

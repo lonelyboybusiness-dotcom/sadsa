@@ -1,32 +1,64 @@
 import { motion } from "framer-motion";
 import clsx from "clsx";
-
-import heritageLogo from "../../assets/logo/Heritage-Logo.svg";
-import malaiccaLogo from "../../assets/logo/malaicca-logo-01.svg";
-import poonamSanduLogo from "../../assets/logo/poonam-sandu-interior-spacess-logo.svg";
-import sarnishLogo from "../../assets/logo/sarnish-logo.svg";
-import tdfLogo from "../../assets/logo/tdf-diamond-factory-india-private-limited-logo-01.svg";
-
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
 interface ClientsProps {
     id?: string;
     className?: string;
 }
 
-const VIDEO_DATA = [
-    { id: 1, youtubeId: "RrxEfXlgCOk", title: "Client_feedback_01" },
-    { id: 2, youtubeId: "CSd3O9GAgXY", title: "Client_feedback_02" },
-    { id: 3, youtubeId: "BySkjQPpuJE", title: "Client_feedback_03" },
-];
-
-const LOGO_DATA = [
-    { src: heritageLogo, alt: "Heritage" },
-    { src: malaiccaLogo, alt: "Malaicca" },
-    { src: poonamSanduLogo, alt: "Poonam Sandu" },
-    { src: sarnishLogo, alt: "Sarnish" },
-    { src: tdfLogo, alt: "TDF" },
-];
-
 const Clients = ({ id = "clients", className }: ClientsProps) => {
+    const [fetchedLogos, setFetchedLogos] = useState<{ src: string; alt: string }[]>([]);
+    const [fetchedVideos, setFetchedVideos] = useState<{ id: number; youtubeId: string; title: string }[]>([]);
+
+    useEffect(() => {
+        const fetchLogos = async () => {
+            const { data, error } = await supabase
+                .from("logos")
+                .select("client_name, logo_url")
+                .order("id", { ascending: true });
+
+            if (error) {
+                console.error("Error fetching logos:", error);
+            } else if (data && data.length > 0) {
+                const mappedLogos = data
+                    .filter(item => item.logo_url) // ensure url exists
+                    .map(item => ({
+                        src: item.logo_url as string,
+                        alt: item.client_name
+                    }));
+                if (mappedLogos.length > 0) {
+                    setFetchedLogos(mappedLogos);
+                }
+            }
+        };
+
+        const fetchVideos = async () => {
+            const { data, error } = await supabase
+                .from("videos")
+                .select("id, youtube_id, title")
+                .order("created_at", { ascending: false });
+
+            if (error) {
+                console.error("Error fetching videos:", error);
+            } else if (data && data.length > 0) {
+                const mappedVideos = data
+                    .filter(item => item.youtube_id)
+                    .map(item => ({
+                        id: item.id,
+                        youtubeId: item.youtube_id,
+                        title: item.title || "Client Feedback"
+                    }));
+                setFetchedVideos(mappedVideos);
+            }
+        };
+
+        fetchLogos();
+        fetchVideos();
+    }, []);
+
+    const displayLogos = fetchedLogos;
+
     return (
         <section
             id={id}
@@ -52,8 +84,8 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     display: flex;
                     flex-shrink: 0;
                     align-items: center;
-                    gap: 6rem;
-                    padding-right: 6rem;
+                    gap: 10rem;
+                    padding-right: 10rem;
                 }
                 .client-logo {
                     height: 2.8rem; 
@@ -114,7 +146,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
                     {/* DESKTOP VIDEOS */}
                     <div className="desktop-video-row">
-                        {VIDEO_DATA.map((video) => (
+                        {fetchedVideos.map((video) => (
                             <div
                                 key={`desktop-${video.id}`}
                                 style={{
@@ -168,7 +200,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
                     {/* MOBILE VIDEOS */}
                     <div className="mobile-video-grid flex flex-col gap-4 w-full">
-                        {VIDEO_DATA.map((video) => (
+                        {fetchedVideos.map((video) => (
                             <div key={`mob-${video.id}`} style={{ position: "relative", aspectRatio: "16/9", width: "100%" }}>
                                 <div style={{ position: "relative", height: "100%", width: "100%", backgroundColor: "black", borderRadius: "1rem", overflow: "hidden", border: "4px solid #0a0a0a" }}>
                                     <iframe style={{ width: "100%", height: "100%" }} src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`} title={video.title} allowFullScreen />
@@ -191,16 +223,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 <div className="mx-auto w-[72%] mt-[4vh]  max-w-6xl">
                     <div className="relative h-[80px] md:h-[110px] bg-[#f59e0b] px-12 rounded-[50px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
-                            <div className="clients-grid logo-animate">
-                                {LOGO_DATA.map((logo, index) => (
-                                    <img key={`a-${index}`} src={logo.src} alt={logo.alt} className="client-logo" loading="eager" />
-                                ))}
-                            </div>
-                            <div className="clients-grid logo-animate">
-                                {LOGO_DATA.map((logo, index) => (
-                                    <img key={`b-${index}`} src={logo.src} alt={logo.alt} className="client-logo" loading="eager" />
-                                ))}
-                            </div>
+                            {/* Duplicate grids ensure there are no empty gaps when looping */}
+                            {[0, 1, 2, 3, 4, 5].map((i) => (
+                                <div key={`grid-${i}`} className="clients-grid logo-animate" aria-hidden={i > 0}>
+                                    {displayLogos.map((logo, index) => (
+                                        <img key={`${i}-${index}`} src={logo.src} alt={logo.alt} className="client-logo" loading="eager" />
+                                    ))}
+                                </div>
+                            ))}
                         </div>
 
                     </div>

@@ -45,7 +45,7 @@ const Hero = ({ id = "hero", isLandingComplete = true }: HeroProps) => {
                 <motion.h1
                     className="flex flex-col items-start justify-center font-display font-bold leading-[0.9] text-white"
                     style={{
-                        fontSize: 'clamp(3rem, 15vw, 12rem)',
+                        fontSize: 'clamp(1.8rem, 10vw, 12rem)',
                         letterSpacing: '-0.02em'
                     }}
                 >
