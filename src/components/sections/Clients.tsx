@@ -63,7 +63,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
         <section
             id={id}
             className={clsx(
-                "relative w-full min-h-screen bg-primary flex flex-col items-center justify-center py-[72px] lg:py-[88px]",
+                "relative w-full min-h-screen bg-primary flex flex-col items-center justify-center py-[48px] md:py-[72px] lg:py-[88px]",
                 className
             )}
         >
@@ -84,13 +84,13 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     display: flex;
                     flex-shrink: 0;
                     align-items: center;
-                    gap: 10rem;
-                    padding-right: 10rem;
+                    gap: 6rem;
+                    padding-right: 6rem;
                 }
                 .client-logo {
-                    height: 2.8rem; 
+                    height: 2rem; 
                     width: auto;
-                    max-width: 180px;
+                    max-width: 150px;
                     object-fit: contain;
                     flex-shrink: 0;
                 }
@@ -98,27 +98,27 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 .desktop-video-row { display: none; }
 
                 /* ── MOBILE + TABLET GRID (< 1280px) ── */
-                .mobile-video-grid { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; padding: 0 1rem 1.5rem 1rem; }
-                .mobile-top-row { display: flex; flex-direction: row; gap: 0.75rem; width: 100%; }
+                .mobile-video-grid { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; width: 100%; padding: 0 0.5rem 1rem 0.5rem; }
+                .mobile-top-row { display: flex; flex-direction: row; gap: 0.5rem; width: 100%; }
                 .mobile-top-row .mobile-video-card { flex: 1; aspect-ratio: 16/10; position: relative; }
                 .mobile-bottom-row { display: flex; justify-content: center; width: 100%; }
-                .mobile-bottom-row .mobile-video-card { width: 60%; aspect-ratio: 16/10; position: relative; }
+                .mobile-bottom-row .mobile-video-card { width: 55%; aspect-ratio: 16/10; position: relative; }
 
                 /* ── TABLET (768px–1279px) ── */
                 @media (min-width: 768px) and (max-width: 1279px) {
                     .desktop-video-row { display: none !important; }
                     .mobile-video-grid { display: flex !important; padding: 0 2rem 3rem 2rem; gap: 1.2rem; }
                     .mobile-top-row { gap: 1.2rem; }
-                    .mobile-bottom-row .mobile-video-card { width: 55%; }
-                    .client-logo { height: 3rem; }
+                    .mobile-bottom-row .mobile-video-card { width: 45%; }
+                    .client-logo { height: 2rem; }
                 }
 
                 /* ── DESKTOP (1280px+) ── */
                 @media (min-width: 1280px) {
-                    .desktop-video-row { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 3rem; width: 100%; overflow-x: auto; padding: 0 0 72px 0; scrollbar-width: none; overflow-y: visible; }
+                    .desktop-video-row { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 2rem; width: 100%; overflow-x: auto; padding: 0 0 48px 0; scrollbar-width: none; overflow-y: visible; }
                     .desktop-video-row::-webkit-scrollbar { display: none; }
                     .mobile-video-grid { display: none !important; }
-                    .client-logo { height: 3.5rem; }
+                    .client-logo { height: 2.5rem; }
                 }
             `}</style>
 
@@ -137,7 +137,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                             viewport={{ once: true }}
                             className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
                             style={{
-                                fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+                                fontSize: 'clamp(1.2rem, 3.5vw, 4.5rem)',
                                 textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
                                 color: '#ffffffff',
                                 paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
@@ -167,7 +167,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                 className="group relative"
                                 style={{
                                     flexShrink: 0,
-                                    width: "440px",
+                                    width: "360px",
                                     aspectRatio: "16/10",
                                     position: "relative"
                                 }}
@@ -275,16 +275,16 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
             </div>
 
             {/* ── ORANGE PILL LOGO SCROLLER ── */}
-            <div className="relative z-10 w-full mt-12 bg-black py-16">
-                <div className="px-[5vw] mb-8 text-center md:text-left">
-                    <h3 className="text-white/20 text-3xl md:text-5xl font-bold tracking-tighter uppercase italic leading-none">
+            <div className="relative z-10 w-full mt-8 md:mt-12 bg-black py-10 md:py-16">
+                <div className="px-[5vw] mb-6 md:mb-8 text-center md:text-left">
+                    <h3 className="text-white/20 text-lg md:text-3xl font-bold tracking-tighter uppercase italic leading-none">
                         WE WORKED WITH
                     </h3>
                 </div>
 
                 {/* Orange Pill Container */}
-                <div className="mx-auto w-[72%] mt-[4vh]  max-w-6xl">
-                    <div className="relative h-[80px] md:h-[110px] bg-[#f59e0b] px-12 rounded-[50px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
+                <div className="mx-auto w-[85%] md:w-[72%] mt-[2vh] md:mt-[4vh] max-w-6xl">
+                    <div className="relative h-[60px] md:h-[80px] bg-[#f59e0b] px-6 md:px-12 rounded-[30px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
                             {[0, 1, 2, 3, 4, 5].map((i) => (
                                 <div key={`grid-${i}`} className="clients-grid logo-animate" aria-hidden={i > 0}>

@@ -55,10 +55,10 @@ const ScrollColumn = ({ speed = 20, reverse = false, images: baseImages = [] }: 
 
 const DiagonalGallery = ({ className, lane1, lane2 }: DiagonalGalleryProps) => {
   return (
-    <div className={clsx("relative w-full h-[120vh] overflow-hidden flex justify-center gap-8 md:gap-24 lg:gap-32", className)}>
-      <div className="flex gap-8 md:gap-24 lg:gap-32 transform rotate-[25deg] scale-125 origin-center">
+    <div className={clsx("relative w-full h-[120vh] overflow-hidden flex justify-center", className)}>
+      <div className="flex gap-[26px] transform rotate-[25deg] scale-125 origin-center ml-[30%]">
         <ScrollColumn speed={160} images={lane1} />
-        <ScrollColumn speed={140} reverse images={lane2} />
+        <ScrollColumn speed={160} images={lane2} reverse />
       </div>
     </div>
   );

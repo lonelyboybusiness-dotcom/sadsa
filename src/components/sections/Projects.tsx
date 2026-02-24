@@ -33,10 +33,11 @@ const portfolioStyles = `
   padding-inline: clamp(1rem, 2.1vw, 2.5rem);
   padding-top: clamp(6.5rem, 11vh, 8.25rem);
   padding-bottom: clamp(2.5rem, 7vh, 4.5rem);
-  min-height: calc(100vh + clamp(10rem, 17vh, 14rem));
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   --frame-white: rgba(255, 255, 255, 0.9);
   --frame-white-soft: rgba(255, 255, 255, 0.66);
   --frame-highlight: rgba(255, 255, 255, 0.22);
@@ -177,7 +178,7 @@ const portfolioStyles = `
   .portfolio-layout {
     width: min(100%, 74rem);
     padding-top: clamp(6.25rem, 12vh, 7.75rem);
-    min-height: calc(100vh + clamp(8rem, 15vh, 12rem));
+    min-height: 100%;
   }
 
   .portfolio-title {
@@ -205,7 +206,7 @@ const portfolioStyles = `
     padding-inline: clamp(0.75rem, 4vw, 1rem);
     padding-top: clamp(6rem, 13vh, 7.25rem);
     padding-bottom: clamp(4.75rem, 11vh, 6rem);
-    min-height: auto;
+    min-height: 100%;
   }
 
   .portfolio-title {
@@ -221,33 +222,35 @@ const portfolioStyles = `
   }
 }
 
-/* iPad Pro portrait layout (1204x1366 class) */
-@media (min-width: 73rem) and (max-width: 80rem) and (min-height: 80rem) {
+/* iPad Pro portrait layout (1024x1366 and nearby) */
+@media (min-width: 64rem) and (max-width: 80rem) and (min-height: 80rem) {
   .portfolio-section {
-    --portfolio-gap-x: clamp(2.1rem, 3.4vw, 2.9rem);
-    --portfolio-gap-y: clamp(2.2rem, 3vh, 2.85rem);
-    --portfolio-grid-max: 56rem;
+    --portfolio-gap-x: clamp(1.85rem, 2.8vw, 2.55rem);
+    --portfolio-gap-y: clamp(2.1rem, 2.9vh, 2.8rem);
+    --portfolio-grid-max: 54rem;
   }
 
   .portfolio-layout {
     width: min(100%, 76rem);
     justify-content: center;
+    align-items: center;
     min-height: 100%;
-    padding-top: clamp(5.25rem, 7.5vh, 6.5rem);
-    padding-bottom: clamp(2rem, 4.5vh, 3rem);
+    padding-top: clamp(4.75rem, 6.2vh, 6rem);
+    padding-bottom: clamp(4.75rem, 6.2vh, 6rem);
   }
 
   .portfolio-title {
-    font-size: clamp(2.3rem, 3.8vw, 2.9rem);
+    font-size: clamp(2.2rem, 3.4vw, 2.8rem);
   }
 
   .portfolio-divider {
-    width: clamp(20rem, 44vw, 31rem);
-    margin-bottom: clamp(1.25rem, 2.3vh, 1.85rem);
+    width: clamp(19rem, 40vw, 30rem);
+    margin-bottom: clamp(1.15rem, 2.2vh, 1.7rem);
   }
 
   .portfolio-grid {
     flex: 0 0 auto;
+    align-content: center;
   }
 }
 
@@ -261,7 +264,7 @@ const portfolioStyles = `
 
   .portfolio-layout {
     padding-top: clamp(5.75rem, 12vh, 6.75rem);
-    min-height: calc(100vh + clamp(7rem, 12vh, 10rem));
+    min-height: 100%;
   }
 
 }
@@ -277,7 +280,7 @@ const portfolioStyles = `
   .portfolio-layout {
     width: min(100%, 120rem);
     padding-top: clamp(6.5rem, 9vh, 9rem);
-    min-height: calc(100vh + clamp(9rem, 11vh, 13rem));
+    min-height: 100%;
   }
 
   .portfolio-title {
@@ -300,8 +303,10 @@ const portfolioStyles = `
 
   .portfolio-layout {
     width: min(100%, 150rem);
+    justify-content: center;
+    align-items: center;
     padding-top: clamp(7rem, 8vh, 10rem);
-    min-height: calc(100vh + clamp(10rem, 10vh, 16rem));
+    min-height: 100%;
   }
 
   .portfolio-title {
@@ -312,18 +317,31 @@ const portfolioStyles = `
     width: clamp(28rem, 22vw, 50rem);
   }
 
+  .portfolio-grid {
+    flex: 0 0 auto;
+  }
+
 }
 `;
+
+const DUMMY_PORTFOLIO: Video[] = [
+  { id: 1, youtube_url: 'https://www.youtube.com/watch?v=LXb3EKWsInQ' },
+  { id: 2, youtube_url: 'https://www.youtube.com/watch?v=ysz5S6P_z-U' },
+  { id: 3, youtube_url: 'https://www.youtube.com/watch?v=jNQXAC9IVRw' },
+  { id: 4, youtube_url: 'https://www.youtube.com/watch?v=ScMzIvxBSi4' },
+  { id: 5, youtube_url: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ' },
+  { id: 6, youtube_url: 'https://www.youtube.com/watch?v=tgbNymZ7vqY' },
+];
 
 function Portfolio({ id = 'portfolio', className }: { id?: string; className?: string }) {
   const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const { data, error } = await supabase.from('portfolio').select('*').limit(PORTFOLIO_SLOTS);
+      const { data, error } = await supabase.from('portfolio').select('*');
 
-      if (error || !data) {
-        if (error) console.error('Error fetching portfolio videos:', error);
+      if (error || !data || data.length === 0) {
+        setVideos(DUMMY_PORTFOLIO);
         return;
       }
 
@@ -341,7 +359,8 @@ function Portfolio({ id = 'portfolio', className }: { id?: string; className?: s
   };
 
   const slots = useMemo(() => {
-    return Array.from({ length: PORTFOLIO_SLOTS }, (_, index) => videos[index] ?? null);
+    const slotCount = Math.max(PORTFOLIO_SLOTS, videos.length);
+    return Array.from({ length: slotCount }, (_, index) => videos[index] ?? null);
   }, [videos]);
 
   const handleSectionWheelCapture = (event: WheelEvent<HTMLElement>) => {
@@ -369,8 +388,29 @@ function Portfolio({ id = 'portfolio', className }: { id?: string; className?: s
       <style>{portfolioStyles}</style>
 
       <div className="portfolio-layout">
-        <h2 className="portfolio-title">our portfolio.</h2>
-        <div className="portfolio-divider" aria-hidden="true" />
+        <h2
+          className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
+          style={{
+            fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+            textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
+            color: '#ffffffff',
+            paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+            letterSpacing: '0.12em',
+          }}
+        >
+          our portfolio.
+        </h2>
+        <div
+          className="flex-shrink-0"
+          style={{
+            width: 'clamp(200px, 38vw, 600px)',
+            height: '3px',
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+            borderRadius: '9999px',
+            marginBottom: 'clamp(1.2rem, 3vh, 3rem)',
+          }}
+          aria-hidden="true"
+        />
 
         <div className="portfolio-grid">
           {slots.map((video, index) => {

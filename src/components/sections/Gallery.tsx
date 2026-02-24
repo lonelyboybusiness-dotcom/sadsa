@@ -37,17 +37,6 @@ const galleryStyles = `
   --gallery-row-width: min(100%, calc((var(--gallery-small-width) * 2) + var(--gallery-row-gap)));
 }
 
-.gallery-title {
-  display: block;
-  white-space: nowrap;
-  font-family: 'Retroica', system-ui, sans-serif !important;
-  font-size: clamp(2.1rem, 3.1vw, 2.85rem);
-  line-height: 1.04;
-  color: #FEFEFA !important;
-  text-shadow: 0 0.125rem 0 #FFA500, 0 0.375rem 0.75rem rgba(255, 165, 0, 0.62), 0 0 1.125rem rgba(255, 165, 0, 0.48) !important;
-  filter: drop-shadow(0 0.125rem 0.3125rem rgba(0, 0, 0, 0.2)) drop-shadow(0 0.3125rem 0.5rem rgba(255, 165, 0, 0.42));
-}
-
 .gallery-divider {
   width: clamp(19rem, 36vw, 34rem);
   margin-top: clamp(0.4rem, 0.85vh, 0.65rem);
@@ -171,10 +160,6 @@ const galleryStyles = `
     --gallery-row-gap: clamp(0.9rem, 1.8vw, 1.125rem);
   }
 
-  .gallery-title {
-    font-size: clamp(2rem, 5vw, 2.6rem);
-  }
-
   .gallery-divider {
     width: clamp(17rem, 58vw, 28rem);
   }
@@ -199,10 +184,6 @@ const galleryStyles = `
     --gallery-small-width: min(58vw, 19.5rem);
     --gallery-row-width: var(--gallery-small-width);
     --gallery-row-gap: 1.125rem;
-  }
-
-  .gallery-title {
-    font-size: clamp(2rem, 10vw, 2.55rem);
   }
 
   .gallery-divider {
@@ -244,10 +225,6 @@ const galleryStyles = `
     --gallery-row-gap: clamp(2.25rem, calc(1.2vw + 1.25rem), 2.85rem);
   }
 
-  .gallery-title {
-    font-size: clamp(2.6rem, 2.1vw, 3.3rem);
-  }
-
   .gallery-divider {
     width: clamp(24rem, 25vw, 40rem);
   }
@@ -271,10 +248,6 @@ const galleryStyles = `
     --gallery-row-gap: clamp(1.1rem, 1.8vw, 1.5rem);
   }
 
-  .gallery-title {
-    font-size: clamp(2.3rem, 3.8vw, 2.9rem);
-  }
-
   .gallery-divider {
     width: clamp(20rem, 44vw, 31rem);
     margin-bottom: clamp(1.25rem, 2.3vh, 1.85rem);
@@ -295,10 +268,6 @@ const galleryStyles = `
     padding-top: clamp(7rem, 8vh, 10rem);
     --gallery-small-width: min(16vw, 22rem);
     --gallery-row-gap: clamp(1.2rem, 1vw, 2rem);
-  }
-
-  .gallery-title {
-    font-size: clamp(3rem, 1.9vw, 4rem);
   }
 
   .gallery-divider {
@@ -364,12 +333,30 @@ const Gallery = ({ id = 'gallery', className }: GalleryProps) => {
       <style>{galleryStyles}</style>
 
       <div className="gallery-layout">
-        <div className="text-center shrink-0">
-          <div className="inline-flex flex-col items-center">
-            <span className="gallery-title">visual diary.</span>
-            <div className="gallery-divider" aria-hidden="true" />
-          </div>
-        </div>
+        <h2
+          className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
+          style={{
+            fontFamily: '"Retroica", Georgia, serif',
+            fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+            textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
+            color: '#ffffffff',
+            paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+            letterSpacing: '0.12em',
+          }}
+        >
+          visual diary.
+        </h2>
+        <div
+          className="flex-shrink-0"
+          style={{
+            width: 'clamp(200px, 38vw, 600px)',
+            height: '3px',
+            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+            borderRadius: '9999px',
+            marginBottom: 'clamp(1.2rem, 3vh, 3rem)',
+          }}
+          aria-hidden="true"
+        />
 
         <div className="gallery-video-grid">
           <div className="gallery-video-card gallery-video-card--top">
