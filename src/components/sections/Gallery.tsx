@@ -32,6 +32,9 @@ const galleryStyles = `
   --divider-white-mid: rgba(255, 255, 255, 0.9);
   --divider-white-strong: rgba(255, 255, 255, 1);
   --card-radius: clamp(0.75rem, 1vw, 1.15rem);
+  --gallery-small-width: min(28vw, 15rem);
+  --gallery-row-gap: clamp(0.9rem, 1.5vw, 1.25rem);
+  --gallery-row-width: min(100%, calc((var(--gallery-small-width) * 2) + var(--gallery-row-gap)));
 }
 
 .gallery-title {
@@ -72,10 +75,10 @@ const galleryStyles = `
 }
 
 .gallery-video-row {
-  width: min(100%, 49rem);
+  width: var(--gallery-row-width);
   display: flex;
   justify-content: center;
-  gap: clamp(0.9rem, 1.5vw, 1.25rem);
+  gap: var(--gallery-row-gap);
 }
 
 .gallery-video-card {
@@ -97,9 +100,8 @@ const galleryStyles = `
   transform: translateY(-0.1rem);
   border-color: var(--divider-white-strong);
   box-shadow:
-    0 0.5rem 1.05rem rgba(0, 0, 0, 0.18),
-    0 0 0.45rem rgba(255, 255, 255, 0.3),
-    0 0 1.25rem rgba(255, 255, 255, 0.24);
+    0 0.625rem 2.5rem rgba(255, 165, 0, 0.4),
+    0 0 3.75rem rgba(255, 165, 0, 0.2);
 }
 
 .gallery-video-card::before {
@@ -150,13 +152,13 @@ const galleryStyles = `
 }
 
 .gallery-video-card--top {
-  width: min(70vw, 30rem);
+  width: var(--gallery-row-width);
   height: auto;
   aspect-ratio: 16 / 10;
 }
 
 .gallery-video-card--small {
-  width: min(42vw, 22rem);
+  width: var(--gallery-small-width);
   height: auto;
   aspect-ratio: 16 / 10;
 }
@@ -165,6 +167,8 @@ const galleryStyles = `
   .gallery-layout {
     width: min(100%, 74rem);
     padding-top: clamp(7rem, 12vh, 8rem);
+    --gallery-small-width: min(30vw, 14rem);
+    --gallery-row-gap: clamp(0.9rem, 1.8vw, 1.125rem);
   }
 
   .gallery-title {
@@ -179,18 +183,6 @@ const galleryStyles = `
     gap: clamp(1.125rem, 2.1vh, 1.5rem);
   }
 
-  .gallery-video-card--top {
-    width: min(86vw, 36rem);
-  }
-
-  .gallery-video-row {
-    width: min(92vw, 46rem);
-    gap: clamp(0.9rem, 1.8vw, 1.125rem);
-  }
-
-  .gallery-video-card--small {
-    width: min(44vw, 20rem);
-  }
 }
 
 /* iPad layout */
@@ -204,6 +196,9 @@ const galleryStyles = `
   .gallery-layout {
     padding-inline: clamp(0.75rem, 4vw, 1rem);
     padding-top: clamp(6.75rem, 13vh, 7.75rem);
+    --gallery-small-width: min(58vw, 19.5rem);
+    --gallery-row-width: var(--gallery-small-width);
+    --gallery-row-gap: 1.125rem;
   }
 
   .gallery-title {
@@ -221,12 +216,8 @@ const galleryStyles = `
     gap: 1.125rem;
   }
 
-  .gallery-video-card--top {
-    width: min(82vw, 28rem);
-  }
-
   .gallery-video-card--small {
-    width: min(74vw, 22rem);
+    width: var(--gallery-small-width);
   }
 }
 
@@ -234,23 +225,14 @@ const galleryStyles = `
 @media (max-height: 46rem) and (min-width: 64rem) {
   .gallery-layout {
     padding-top: clamp(5.75rem, 12vh, 6.75rem);
+    --gallery-small-width: min(21vw, 12rem);
+    --gallery-row-gap: clamp(1.525rem, calc(1.2vw + 0.625rem), 1.875rem);
   }
 
   .gallery-video-grid {
     gap: clamp(1.525rem, calc(1.6vh + 0.625rem), 1.875rem);
   }
 
-  .gallery-video-card--top {
-    width: min(52vw, 26rem);
-  }
-
-  .gallery-video-row {
-    gap: clamp(1.525rem, calc(1.2vw + 0.625rem), 1.875rem);
-  }
-
-  .gallery-video-card--small {
-    width: min(31vw, 17.5rem);
-  }
 }
 
 /* Ultrawide target: 2560x1080 */
@@ -258,6 +240,8 @@ const galleryStyles = `
   .gallery-layout {
     width: min(100%, 120rem);
     padding-top: clamp(6.5rem, 9vh, 9rem);
+    --gallery-small-width: min(19vw, 16.5rem);
+    --gallery-row-gap: clamp(2.25rem, calc(1.2vw + 1.25rem), 2.85rem);
   }
 
   .gallery-title {
@@ -274,18 +258,6 @@ const galleryStyles = `
     gap: clamp(2.45rem, calc(2vh + 1.25rem), 3.15rem);
   }
 
-  .gallery-video-card--top {
-    width: min(33vw, 38rem);
-  }
-
-  .gallery-video-row {
-    width: min(58vw, 62rem);
-    gap: clamp(2.25rem, calc(1.2vw + 1.25rem), 2.85rem);
-  }
-
-  .gallery-video-card--small {
-    width: min(27vw, 24rem);
-  }
 }
 
 /* iPad Pro portrait layout (1204x1366 class) */
@@ -295,6 +267,8 @@ const galleryStyles = `
     justify-content: center;
     padding-top: clamp(5.25rem, 7.5vh, 6.5rem);
     padding-bottom: clamp(2rem, 4.5vh, 3rem);
+    --gallery-small-width: min(25vw, 13rem);
+    --gallery-row-gap: clamp(1.1rem, 1.8vw, 1.5rem);
   }
 
   .gallery-title {
@@ -312,18 +286,6 @@ const galleryStyles = `
     gap: clamp(1.45rem, 2.2vh, 2rem);
   }
 
-  .gallery-video-card--top {
-    width: min(66vw, 31rem);
-  }
-
-  .gallery-video-row {
-    width: min(78vw, 45rem);
-    gap: clamp(1.1rem, 1.8vw, 1.5rem);
-  }
-
-  .gallery-video-card--small {
-    width: min(36vw, 18.75rem);
-  }
 }
 
 /* 4K target: 3840x2160 */
@@ -331,6 +293,8 @@ const galleryStyles = `
   .gallery-layout {
     width: min(100%, 150rem);
     padding-top: clamp(7rem, 8vh, 10rem);
+    --gallery-small-width: min(16vw, 22rem);
+    --gallery-row-gap: clamp(1.2rem, 1vw, 2rem);
   }
 
   .gallery-title {
@@ -346,18 +310,6 @@ const galleryStyles = `
     gap: clamp(1.4rem, 1.8vh, 2.2rem);
   }
 
-  .gallery-video-card--top {
-    width: min(29vw, 50rem);
-  }
-
-  .gallery-video-row {
-    width: min(52vw, 74rem);
-    gap: clamp(1.2rem, 1vw, 2rem);
-  }
-
-  .gallery-video-card--small {
-    width: min(24vw, 32rem);
-  }
 }
 `;
 

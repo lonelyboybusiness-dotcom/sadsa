@@ -94,11 +94,11 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
             )}
         >
             {/* Glassy Background Decoration */}
-            <div className="absolute top-[-20%] right-[-30%] md:right-[-40%] lg:right-[-50%] w-[120%] md:w-[150%] h-[150%] pointer-events-none z-0 opacity-40 flex items-center justify-center">
+            <div className="absolute top-[-10%] right-[-5%] md:right-[-10%] w-[100%] h-[120%] pointer-events-none z-0 opacity-65 overflow-hidden flex items-center justify-end">
                 <DiagonalGallery
                     lane1={lane1Images}
                     lane2={lane2Images}
-                    className="!h-[180%] !w-[180%]"
+                    className="!w-[100%] !h-[120%]"
                 />
             </div>
 
@@ -179,13 +179,11 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </button>
 
                             {/* Contact Details (Large) */}
-                            <div className="flex flex-col gap-0.5 mt-2 md:mt-3 px-2">
-                                <div className="flex items-center gap-2 md:gap-3 text-base md:text-xl font-bold text-text">
-                                    <span className="text-xl md:text-2xl">📍</span>
-                                    <span>Chembur</span>
+                            <div className="flex flex-col gap-2 mt-2 md:mt-3 px-2">
+                                <div className="flex items-start gap-2 md:gap-3 text-sm md:text-base font-medium text-text/80 leading-relaxed max-w-[90%]">
+                                    <span>15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik Park, Chembur, Mumbai, Maharashtra 400071</span>
                                 </div>
                                 <div className="flex items-center gap-2 md:gap-3 text-base md:text-xl font-bold text-text">
-                                    <span className="text-xl md:text-2xl">📲</span>
                                     <a
                                         href="https://wa.me/919819886633"
                                         target="_blank"
@@ -196,7 +194,6 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                     </a>
                                 </div>
                                 <div className="flex items-center gap-2 md:gap-3 text-base md:text-xl font-bold text-text">
-                                    <span className="text-xl md:text-2xl">✉️</span>
                                     <a href="mailto:studio@aakritcinematic.in" className="hover:text-accent transition-colors">
                                         studio@aakritcinematic.in
                                     </a>

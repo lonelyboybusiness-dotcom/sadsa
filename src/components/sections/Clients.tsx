@@ -93,13 +93,28 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     max-width: 180px;
                     object-fit: contain;
                     flex-shrink: 0;
-                    /* Filter removed to keep original colors */
                 }
 
                 .desktop-video-row { display: none; }
-                .mobile-video-grid { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; padding: 0 1rem 1.5rem 1rem; }
 
-                @media (min-width: 768px) {
+                /* ── MOBILE + TABLET GRID (< 1280px) ── */
+                .mobile-video-grid { display: flex; flex-direction: column; align-items: center; gap: 1rem; width: 100%; padding: 0 1rem 1.5rem 1rem; }
+                .mobile-top-row { display: flex; flex-direction: row; gap: 0.75rem; width: 100%; }
+                .mobile-top-row .mobile-video-card { flex: 1; aspect-ratio: 16/10; position: relative; }
+                .mobile-bottom-row { display: flex; justify-content: center; width: 100%; }
+                .mobile-bottom-row .mobile-video-card { width: 60%; aspect-ratio: 16/10; position: relative; }
+
+                /* ── TABLET (768px–1279px) ── */
+                @media (min-width: 768px) and (max-width: 1279px) {
+                    .desktop-video-row { display: none !important; }
+                    .mobile-video-grid { display: flex !important; padding: 0 2rem 3rem 2rem; gap: 1.2rem; }
+                    .mobile-top-row { gap: 1.2rem; }
+                    .mobile-bottom-row .mobile-video-card { width: 55%; }
+                    .client-logo { height: 3rem; }
+                }
+
+                /* ── DESKTOP (1280px+) ── */
+                @media (min-width: 1280px) {
                     .desktop-video-row { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: center; gap: 3rem; width: 100%; overflow-x: auto; padding: 0 0 72px 0; scrollbar-width: none; overflow-y: visible; }
                     .desktop-video-row::-webkit-scrollbar { display: none; }
                     .mobile-video-grid { display: none !important; }
@@ -149,6 +164,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                         {fetchedVideos.map((video) => (
                             <div
                                 key={`desktop-${video.id}`}
+                                className="group relative"
                                 style={{
                                     flexShrink: 0,
                                     width: "440px",
@@ -156,25 +172,66 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                     position: "relative"
                                 }}
                             >
-                                {/* 1. OUTER AMBIENT GLOW (Subtle interaction with yellow BG) */}
+                                {/* 1. OUTER AMBIENT GLOW */}
                                 <div className="absolute inset-x-10 -bottom-4 h-1/2 bg-black/20 blur-3xl -z-10" />
 
-                                {/* 2. MAIN DEVICE FRAME */}
+                                {/* THE SCREEN AREA styled like portfolio-card */}
                                 <div className={clsx(
-                                    "h-full w-full bg-[#141414] overflow-hidden",
-                                    "rounded-[2rem] p-[8px]", // Thinner, more precise bezel
-                                    "shadow-[0_20px_50px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.05)]", // Multi-layer shadow + rim light
+                                    "relative h-full w-full overflow-hidden rounded-[1.15rem] bg-[rgba(255,255,255,0.05)]",
+                                    "border-[0.125rem] border-[rgba(255,255,255,0.9)]",
+                                    "shadow-[0_0.375rem_0.9rem_rgba(0,0,0,0.14),0_0_0.35rem_rgba(255,255,255,0.22),0_0_1rem_rgba(255,255,255,0.18)]",
+                                    "transition-all duration-200 ease-in-out",
+                                    "hover:-translate-y-[0.1rem] hover:border-[#ffffff] hover:shadow-[0_0.625rem_2.5rem_rgba(255,165,0,0.4),0_0_3.75rem_rgba(255,165,0,0.2)]"
                                 )}>
 
-                                    {/* 3. THE SCREEN AREA */}
-                                    <div className="relative h-full w-full overflow-hidden rounded-[1.6rem] bg-black group">
+                                    {/* Inner subtle glow and reflection details like portfolio-card::before and ::after */}
+                                    <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 border-[0.09rem] border-[rgba(255,255,255,0.66)] shadow-[inset_0_0_0.18rem_rgba(255,255,255,0.48),inset_0_0_1rem_rgba(255,255,255,0.14),0_0_1.05rem_rgba(255,255,255,0.24)]" />
 
-                                        {/* Professional Lens Reflection (Static) */}
-                                        <div className="absolute inset-0 z-10 bg-gradient-to-tr from-white/5 via-transparent to-transparent pointer-events-none" />
+                                    <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 opacity-80" style={{
+                                        background: `linear-gradient(150deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0.02) 36%, rgba(255, 255, 255, 0) 58%), radial-gradient(120% 85% at 50% -18%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(110% 92% at 50% 118%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%)`
+                                    }} />
 
-                                        {/* Subtle Internal Bezel Shadow */}
-                                        <div className="absolute inset-0 z-10 shadow-[inset_0_4px_12px_rgba(0,0,0,0.9)] pointer-events-none" />
+                                    <iframe
+                                        className="relative z-0"
+                                        style={{ width: "100%", height: "100%", border: "none" }}
+                                        src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0&controls=1`}
+                                        title={video.title}
+                                        allowFullScreen
+                                    />
+                                </div>
 
+                                {/* 4. REFINED DATA TAG */}
+                                <div className="mt-8 flex items-center justify-between px-4">
+                                    <div className="flex items-center gap-3">
+                                        <span className="flex h-2 w-2 rounded-full bg-red-600 animate-pulse" />
+                                        <p className="text-black text-[11px] font-black uppercase tracking-[0.3em]"></p>
+                                    </div>
+                                    <p className="text-black/40 text-[9px] font-mono font-medium"></p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* MOBILE + TABLET VIDEOS: 2 on top, 1 centered below */}
+                    <div className="mobile-video-grid">
+                        <div className="mobile-top-row">
+                            {fetchedVideos.slice(0, 2).map((video) => (
+                                <div key={`mob-top-${video.id}`} className="mobile-video-card">
+                                    <div className="absolute inset-x-10 -bottom-4 h-1/2 bg-black/20 blur-3xl -z-10" />
+                                    {/* THE SCREEN AREA */}
+                                    <div className={clsx(
+                                        "relative h-full w-full overflow-hidden rounded-[1.15rem] bg-[rgba(255,255,255,0.05)]",
+                                        "border-[0.125rem] border-[rgba(255,255,255,0.9)]",
+                                        "shadow-[0_0.375rem_0.9rem_rgba(0,0,0,0.14),0_0_0.35rem_rgba(255,255,255,0.22),0_0_1rem_rgba(255,255,255,0.18)]",
+                                        "transition-all duration-200 ease-in-out",
+                                        "hover:-translate-y-[0.1rem] hover:border-[#ffffff] hover:shadow-[0_0.625rem_2.5rem_rgba(255,165,0,0.4),0_0_3.75rem_rgba(255,165,0,0.2)]"
+                                    )}>
+                                        {/* Inner subtle glow and reflection details */}
+                                        <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 border-[0.09rem] border-[rgba(255,255,255,0.66)] shadow-[inset_0_0_0.18rem_rgba(255,255,255,0.48),inset_0_0_1rem_rgba(255,255,255,0.14),0_0_1.05rem_rgba(255,255,255,0.24)]" />
+
+                                        <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 opacity-80" style={{
+                                            background: `linear-gradient(150deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0.02) 36%, rgba(255, 255, 255, 0) 58%), radial-gradient(120% 85% at 50% -18%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(110% 92% at 50% 118%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%)`
+                                        }} />
                                         <iframe
                                             style={{ width: "100%", height: "100%", border: "none" }}
                                             src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0&controls=1`}
@@ -183,30 +240,36 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                         />
                                     </div>
                                 </div>
+                            ))}
+                        </div>
 
-                                {/* 4. REFINED DATA TAG */}
-                                <div className="mt-8 flex items-center justify-between px-4">
-                                    <div className="flex items-center gap-3">
-                                        <span className="flex h-2 w-2 rounded-full bg-red-600 animate-pulse" /> {/* "Live" status dot */}
-                                        <p className="text-black text-[11px] font-black uppercase tracking-[0.3em]">
+                        {fetchedVideos[2] && (
+                            <div className="mobile-bottom-row">
+                                <div className="mobile-video-card">
+                                    <div className="absolute inset-x-10 -bottom-4 h-1/2 bg-black/20 blur-3xl -z-10" />
+                                    {/* THE SCREEN AREA */}
+                                    <div className={clsx(
+                                        "relative h-full w-full overflow-hidden rounded-[1.15rem] bg-[rgba(255,255,255,0.05)]",
+                                        "border-[0.125rem] border-[rgba(255,255,255,0.9)]",
+                                        "shadow-[0_0.375rem_0.9rem_rgba(0,0,0,0.14),0_0_0.35rem_rgba(255,255,255,0.22),0_0_1rem_rgba(255,255,255,0.18)]",
+                                        "transition-all duration-200 ease-in-out",
+                                        "hover:-translate-y-[0.1rem] hover:border-[#ffffff] hover:shadow-[0_0.625rem_2.5rem_rgba(255,165,0,0.4),0_0_3.75rem_rgba(255,165,0,0.2)]"
+                                    )}>
+                                        <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 border-[0.09rem] border-[rgba(255,255,255,0.66)] shadow-[inset_0_0_0.18rem_rgba(255,255,255,0.48),inset_0_0_1rem_rgba(255,255,255,0.14),0_0_1.05rem_rgba(255,255,255,0.24)]" />
 
-                                        </p>
+                                        <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 opacity-80" style={{
+                                            background: `linear-gradient(150deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0.02) 36%, rgba(255, 255, 255, 0) 58%), radial-gradient(120% 85% at 50% -18%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(110% 92% at 50% 118%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%)`
+                                        }} />
+                                        <iframe
+                                            style={{ width: "100%", height: "100%", border: "none" }}
+                                            src={`https://www.youtube.com/embed/${fetchedVideos[2].youtubeId}?modestbranding=1&rel=0&controls=1`}
+                                            title={fetchedVideos[2].title}
+                                            allowFullScreen
+                                        />
                                     </div>
-                                    <p className="text-black/40 text-[9px] font-mono font-medium"></p>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-
-                    {/* MOBILE VIDEOS */}
-                    <div className="mobile-video-grid flex flex-col gap-4 w-full">
-                        {fetchedVideos.map((video) => (
-                            <div key={`mob-${video.id}`} style={{ position: "relative", aspectRatio: "16/9", width: "100%" }}>
-                                <div style={{ position: "relative", height: "100%", width: "100%", backgroundColor: "black", borderRadius: "1rem", overflow: "hidden", border: "4px solid #0a0a0a" }}>
-                                    <iframe style={{ width: "100%", height: "100%" }} src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0`} title={video.title} allowFullScreen />
-                                </div>
-                            </div>
-                        ))}
+                        )}
                     </div>
                 </div>
             </div>
@@ -223,7 +286,6 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 <div className="mx-auto w-[72%] mt-[4vh]  max-w-6xl">
                     <div className="relative h-[80px] md:h-[110px] bg-[#f59e0b] px-12 rounded-[50px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
-                            {/* Duplicate grids ensure there are no empty gaps when looping */}
                             {[0, 1, 2, 3, 4, 5].map((i) => (
                                 <div key={`grid-${i}`} className="clients-grid logo-animate" aria-hidden={i > 0}>
                                     {displayLogos.map((logo, index) => (
@@ -232,7 +294,6 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                 </div>
                             ))}
                         </div>
-
                     </div>
                 </div>
             </div>
