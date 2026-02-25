@@ -103,7 +103,6 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
     // Touch handlers for mobile page transition
     let touchStartX = 0;
     let touchStartY = 0;
-    let touchStartScrollLeft = 0;
     let touchActive = false;
     let touchCancelled = false;
     let touchHasScrollableAncestor = false;
@@ -144,7 +143,6 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
         touchCancelled = false;
         touchStartX = e.touches[0].clientX;
         touchStartY = e.touches[0].clientY;
-        touchStartScrollLeft = container.scrollLeft;
     }
 
     function onTouchMove(e: TouchEvent) {

@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { MapPin, Phone, Mail } from "lucide-react";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import DiagonalGallery from "./DiagonalGallery";
