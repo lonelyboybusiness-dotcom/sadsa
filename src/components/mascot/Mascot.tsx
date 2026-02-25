@@ -25,7 +25,7 @@ const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: Mascot
     const [isLanding, setIsLanding] = useState(true);
 
     const isDesktop = useMediaQuery('(min-width: 1024px)');
-    const mascotSize = isDesktop ? 150 : 100;
+    const mascotSize = isDesktop ? 150 : 60;
 
     const scrollTimeout = useRef<number | null>(null);
 
@@ -175,7 +175,7 @@ const Mascot = ({ containerRef, onLandingComplete, startLanding = true }: Mascot
                 walkAnim.goToAndStop(frame, true);
             }
 
-            const currentMascotSize = window.innerWidth < 1024 ? 100 : 150;
+            const currentMascotSize = window.innerWidth < 1024 ? 60 : 150;
             const currentPadding = window.innerWidth < 1024 ? 16 : 32;
             const moveDistanceOfScreen = window.innerWidth - currentMascotSize - (currentPadding * 2);
 

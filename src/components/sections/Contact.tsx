@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
+import { MapPin, Phone, Mail } from "lucide-react";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import DiagonalGallery from "./DiagonalGallery";
 import { supabase } from "../../lib/supabaseClient";
+import useMediaQuery from "../../hooks/useMediaQuery";
 
 interface ContactProps {
     id?: string;
@@ -17,6 +19,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
     const [lane1Images, setLane1Images] = useState<string[]>([]);
     const [lane2Images, setLane2Images] = useState<string[]>([]);
     const timeoutRef = useRef<number | null>(null);
+    const isMobile = useMediaQuery("(max-width: 1023px)");
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -93,10 +96,10 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
             )}
         >
             {/* Glassy Background Decoration */}
-            <div className="absolute top-[-10%] right-[-5%] md:right-[-10%] w-[100%] h-[120%] pointer-events-none z-0 opacity-65 overflow-hidden flex items-center justify-end">
+            <div className="absolute top-[-10%] right-[-15%] md:right-[-20%] lg:right-[-15%] w-[140%] md:w-[120%] lg:w-[100%] h-[120%] pointer-events-none z-0 opacity-65 overflow-hidden flex items-center justify-end">
                 <DiagonalGallery
                     lane1={lane1Images}
-                    lane2={lane2Images}
+                    lane2={isMobile ? [] : lane2Images}
                     className="!w-[100%] !h-[120%]"
                 />
             </div>
@@ -108,15 +111,15 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                 initial={{ opacity: 0, y: -20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
-                className="absolute top-[120px] md:top-[180px] xl:top-[220px] left-0 w-full z-20 flex flex-col items-center justify-center px-4"
+                className="absolute top-[18%] md:top-[18%] xl:top-[22%] left-0 w-full z-20 flex flex-col items-center justify-center px-6 md:px-10"
             >
                 <h2
                     className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
                     style={{
-                        fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+                        fontSize: isMobile ? "1.5rem" : "clamp(1.8rem, 5.5vw, 6rem)",
                         textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
                         color: '#ffffffff',
-                        paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+                        paddingBottom: 'clamp(0.2rem, 0.6vh, 0.8rem)',
                         letterSpacing: '0.12em',
                     }}
                 >
@@ -126,7 +129,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                 <div
                     className="flex-shrink-0"
                     style={{
-                        width: 'clamp(200px, 38vw, 600px)',
+                        width: 'clamp(160px, 35vw, 600px)',
                         height: '3px',
                         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
                         borderRadius: '9999px',
@@ -134,8 +137,8 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                 />
             </motion.div>
 
-            <div className="w-full h-full max-w-[1400px] mx-auto px-4 md:px-12 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center pt-[100px] md:pt-[150px]">
-                <div className="w-full max-w-[450px] md:max-w-[550px]">
+            <div className="w-full h-full max-w-[1400px] mx-auto px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center pt-[100px] md:pt-[150px]">
+                <div className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[420px] lg:max-w-[550px]">
 
                     {/* Form Card */}
                     <motion.div
@@ -147,7 +150,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                         <form onSubmit={handleSubmit} className="contact-form">
 
                             {/* Name */}
-                            <div style={{ marginBottom: "16px" }}>
+                            <div style={{ marginBottom: '24px' }}>
                                 <input
                                     type="text"
                                     placeholder="Name"
@@ -158,7 +161,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </div>
 
                             {/* Email */}
-                            <div style={{ marginBottom: "16px" }}>
+                            <div style={{ marginBottom: '24px' }}>
                                 <input
                                     type="email"
                                     placeholder="Email"
@@ -169,7 +172,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </div>
 
                             {/* Project Type */}
-                            <div style={{ marginBottom: "16px" }}>
+                            <div style={{ marginBottom: '24px' }}>
                                 <input
                                     type="text"
                                     placeholder="Project Type"
@@ -179,7 +182,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </div>
 
                             {/* Message */}
-                            <div style={{ marginBottom: "16px" }}>
+                            <div style={{ marginBottom: '24px' }}>
                                 <textarea
                                     rows={1}
                                     placeholder="Message"
@@ -190,32 +193,25 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
 
                             <button
                                 type="submit"
-                                style={{ marginBottom: "16px" }}
+                                style={{ marginBottom: '32px' }}
                                 className="group flex w-max items-center justify-center min-w-[120px] md:min-w-[160px] h-[36px] md:h-[52px] px-8 md:px-14 bg-white/20 backdrop-blur-xl text-text font-black uppercase tracking-[0.2em] text-[10px] md:text-[14px] rounded-full border-none outline-none hover:bg-white/30 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:scale-[1.02] shadow-lg"
                             >
                                 <span>Submit</span>
                             </button>
 
-                            {/* Contact Details (Large) */}
-                            <div className="flex flex-col gap-1.5 md:gap-2 mt-2 md:mt-3 px-2">
-                                <div className="flex items-start gap-2 md:gap-3 text-[10px] md:text-base font-medium text-text/80 leading-tight md:leading-relaxed max-w-[95%] md:max-w-[90%]">
+                            {/* Contact Details */}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '32px', paddingLeft: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.7)', lineHeight: 1.5 }}>
+                                    <MapPin style={{ width: '14px', height: '14px', flexShrink: 0, marginTop: '2px' }} strokeWidth={1.5} />
                                     <span>15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik Park, Chembur, Mumbai, Maharashtra 400071</span>
                                 </div>
-                                <div className="flex flex-col mt-1 md:mt-2">
-                                    <span className="text-black text-xs md:text-sm font-medium mb-0.5">call us</span>
-                                    <div className="flex items-center gap-2 md:gap-3 text-[11px] md:text-base font-bold text-black">
-                                        <span className="text-black">
-                                            +91 98198 86633
-                                        </span>
-                                    </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, color: '#000' }}>
+                                    <Phone style={{ width: '14px', height: '14px', flexShrink: 0 }} strokeWidth={1.5} />
+                                    <span>+91 98198 86633</span>
                                 </div>
-                                <div className="flex flex-col mt-1 md:mt-2">
-                                    <span className="text-black text-xs md:text-sm font-medium mb-0.5">email us</span>
-                                    <div className="flex items-center gap-2 md:gap-3 text-[11px] md:text-base font-bold text-black">
-                                        <span className="text-black">
-                                            studio@aakritcinematic.in
-                                        </span>
-                                    </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, color: '#000' }}>
+                                    <Mail style={{ width: '14px', height: '14px', flexShrink: 0 }} strokeWidth={1.5} />
+                                    <span>studio@aakritcinematic.in</span>
                                 </div>
                             </div>
 
@@ -233,7 +229,8 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.5, duration: 0.5 }}
-                        className="mt-4 md:mt-6 text-muted/50 text-[10px] md:text-xs"
+                        style={{ marginTop: '32px' }}
+                        className="text-muted/50 text-[10px] md:text-xs"
                     >
                         © 2026 Aakrit Cinematic Solutions. All rights reserved.
                     </motion.p>

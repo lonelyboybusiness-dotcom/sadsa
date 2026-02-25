@@ -46,6 +46,12 @@
   font-family: 'Retroica' !important;
 }
 
+/* About section body text uses Calisto without affecting other pages */
+.about-body-calisto,
+.about-body-calisto * {
+  font-family: 'Calisto' !important;
+}
+
 body {
   margin: 0;
   padding: 0;

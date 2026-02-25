@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 interface InteractiveVideoProps {
@@ -8,6 +8,24 @@ interface InteractiveVideoProps {
 
 const InteractiveVideo: React.FC<InteractiveVideoProps> = ({ children, className }) => {
     const [isActive, setIsActive] = useState(false);
+    const [isCoarsePointer, setIsCoarsePointer] = useState(false);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'matchMedia' in window) {
+            try {
+                const mq = window.matchMedia('(pointer: coarse)');
+                setIsCoarsePointer(mq.matches);
+            } catch {
+                setIsCoarsePointer(false);
+            }
+        }
+    }, []);
+
+    // On touch devices, we keep a transparent overlay above the video so that
+    // horizontal swipe gestures still reach the horizontal scroller container
+    // instead of being swallowed entirely by the YouTube iframe. On desktop,
+    // we preserve the existing "click to activate video controls" behavior.
+    const showOverlay = isCoarsePointer ? true : !isActive;
 
     return (
         <div
@@ -18,10 +36,13 @@ const InteractiveVideo: React.FC<InteractiveVideoProps> = ({ children, className
         The overlay captures pointer events (like wheel for scrolling) 
         until the user clicks on it to interact with the video.
       */}
-            {!isActive && (
+            {showOverlay && (
                 <div
                     className="absolute inset-0 z-10 cursor-pointer"
-                    onClick={() => setIsActive(true)}
+                    onClick={!isCoarsePointer ? () => setIsActive(true) : undefined}
+                    // Ensure touch gestures are captured here so they bubble up
+                    // to the horizontal scroller instead of being eaten by the iframe.
+                    style={isCoarsePointer ? { touchAction: 'none' } : undefined}
                     title="Click to interact with video"
                 />
             )}

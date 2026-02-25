@@ -113,9 +113,14 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                         type="button"
                                         onClick={() => handleSectionClick(section.id)}
                                         className="
+                                        cursor-pointer
                                         min-w-[78px]
                                         text-center
-                                        transition-opacity
+                                        text-[#1a1a1a]
+                                        transition-all
+                                        duration-300
+                                        hover:scale-110
+                                        hover:drop-shadow-[0_0_8px_rgba(255,107,0,0.8)]
                                         focus:outline-none
                                     "
                                         style={{
@@ -123,7 +128,6 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                             background: 'transparent',
                                             border: 'none',
                                             appearance: 'none',
-                                            color: '#1a1a1a',
                                             fontWeight: 'bold',
                                             fontSize: '13px',
                                             textTransform: 'uppercase',
@@ -146,7 +150,7 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                         background: 'transparent',
                                         border: 'none',
                                         appearance: 'none',
-                                        color: '#1a1a1a',
+                                        color: '#000000',
                                     }}
                                     aria-label="Toggle menu"
                                     aria-expanded={isMobileMenuOpen}
@@ -187,13 +191,15 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                                                             type="button"
                                                             onClick={() => handleSectionClick(section.id)}
                                                             className="
+                                                                cursor-pointer
                                                                 relative
                                                                 flex items-center justify-center
                                                                 w-full
                                                                 px-6
                                                                 text-[16px] font-bold tracking-wide text-white
-                                                                transition-all duration-200 ease-out
-                                                                hover:opacity-60 active:scale-[0.98]
+                                                                transition-all duration-300 ease-out
+                                                                hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(255,107,0,0.8)]
+                                                                active:scale-[0.98]
                                                                 focus-visible:outline-none
                                                             "
                                                             style={{

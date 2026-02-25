@@ -11,6 +11,8 @@ interface ClientsProps {
 
 const Clients = ({ id = "clients", className }: ClientsProps) => {
     const isMobile = useMediaQuery('(max-width: 1023px)');
+    const isDesktop = useMediaQuery('(min-width: 1024px)');
+    const isTablet = useMediaQuery('(min-width: 600px) and (max-width: 1023px)');
     const [fetchedLogos, setFetchedLogos] = useState<{ src: string; alt: string }[]>([]);
     const [fetchedVideos, setFetchedVideos] = useState<{ id: number; youtubeId: string; title: string }[]>([]);
 
@@ -62,13 +64,25 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
     const displayLogos = fetchedLogos;
 
+    // Match the full-screen, centered panel behavior of other sections
+    const safeNav = isDesktop ? 'max(80px, 10dvh)' : isTablet ? 'max(90px, 13dvh)' : '64px';
+    const safeMascot = isDesktop ? 'max(130px, 16dvh)' : isTablet ? 'max(110px, 14dvh)' : '90px';
+
     return (
         <section
             id={id}
             className={clsx(
-                "relative w-full min-h-screen bg-primary flex flex-col items-center justify-center py-[48px] md:py-[72px] lg:py-[88px]",
+                "w-screen flex-shrink-0 flex flex-col items-center justify-center bg-primary relative overflow-hidden",
                 className
             )}
+            style={{
+                height: "100dvh",
+                boxSizing: "border-box",
+                paddingTop: safeNav,
+                paddingBottom: safeMascot,
+                paddingLeft: isDesktop ? "5vw" : "1.5rem",
+                paddingRight: isDesktop ? "5vw" : "1.5rem",
+            }}
         >
             <style>{`
                 @keyframes marquee {
@@ -291,9 +305,19 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     </h3>
                 </div>
 
-                {/* Orange Pill Container */}
-                <div className="mx-auto w-[90%] md:w-[85%] lg:w-full mt-[2vh] md:mt-[4vh] max-w-[1200px]">
-                    <div className="relative h-[60px] md:h-[80px] bg-[#f59e0b] px-6 md:px-12 rounded-[30px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
+                {/*
+                    ── ORANGE PILL: INDEPENDENT SIZING ──
+                    Change ONLY the width below to resize the pill.
+                    The parent uses flex+justify-center so it is always
+                    perfectly centered regardless of page layout.
+                    Mobile  → 90vw (max 500px)
+                    Desktop → 1120px
+                */}
+                <div className="w-full flex justify-center">
+                    <div
+                        className="relative h-[60px] md:h-[80px] bg-[#f59e0b] px-6 md:px-12 rounded-[30px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]"
+                        style={{ width: isMobile ? 'min(90vw, 500px)' : '1120px' }}
+                    >
                         <div className="home-logo-wrapper">
                             {[0, 1, 2, 3, 4, 5].map((i) => (
                                 <div key={`grid-${i}`} className="clients-grid logo-animate" aria-hidden={i > 0}>

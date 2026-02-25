@@ -23,6 +23,15 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
         return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     }
 
+    // Helper: returns true if event target is inside a section that should
+    // always keep its own vertical scroll (e.g. portfolio page on desktop)
+    function isInVerticalFirstZone(element: HTMLElement | null): boolean {
+        if (!element) return false;
+        // Any element inside the portfolio section should keep native vertical scroll.
+        if (element.closest('.portfolio-section')) return true;
+        return false;
+    }
+
     // Wheel handler - non-passive so we can preventDefault
     // Helper to check if element or its parents can scroll vertically
     function isScrollable(element: HTMLElement | null, direction: number): boolean {
@@ -47,9 +56,24 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
 
     // Wheel handler - non-passive so we can preventDefault
     function onWheel(e: WheelEvent) {
-        // Check if we should allow native vertical scrolling
-        if (isScrollable(e.target as HTMLElement, e.deltaY)) {
-            return; // Let native scroll happen
+        const targetEl = e.target as HTMLElement | null;
+
+        // Desktop: inside a "vertical-first" zone (like the portfolio) we:
+        // 1. Let the inner area consume wheel events while it *can* scroll vertically.
+        // 2. As soon as it hits its top/bottom, we fall back to horizontal scrolling
+        //    so the main rail can continue moving and you don't get "stuck" there.
+        if (window.innerWidth >= 1024 && isInVerticalFirstZone(targetEl)) {
+            if (isScrollable(targetEl, e.deltaY)) {
+                return; // Inner portfolio content still scrolls → don't hijack.
+            }
+            // At the vertical boundary → allow the horizontal rail to take over
+            // by *not* returning here and letting the rest of the handler run.
+        } else {
+            // Outside vertical-first zones, respect any other vertically scrollable
+            // elements (e.g. modals, dropdowns) before we intercept the wheel.
+            if (isScrollable(targetEl, e.deltaY)) {
+                return; // Let native scroll happen
+            }
         }
 
         // Cancel auto-scroll on user interaction
@@ -76,9 +100,123 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
         }
     }
 
-    // Touch handlers for mobile have been removed. 
-    // We let the browser's native horizontal scrolling behavior (momentum, elasticity) handle touch interactions.
-    // The requestAnimationFrame loop below will seamlessly sync its internal state if it detects a native scroll.
+    // Touch handlers for mobile page transition
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartScrollLeft = 0;
+    let touchActive = false;
+    let touchCancelled = false;
+    let touchHasScrollableAncestor = false;
+
+    // Helper: does this element or any parent (up to container) scroll vertically?
+    function hasVerticalScrollableAncestor(el: HTMLElement | null): boolean {
+        if (!el || el === container) return false;
+
+        const style = window.getComputedStyle(el);
+        const overflowY = style.overflowY;
+        const canScrollY =
+            (overflowY === 'auto' || overflowY === 'scroll') &&
+            el.scrollHeight > el.clientHeight;
+
+        if (canScrollY) return true;
+        return hasVerticalScrollableAncestor(el.parentElement);
+    }
+
+    function onTouchStart(e: TouchEvent) {
+        if (window.innerWidth > 768) return;
+
+        const targetEl = e.target as HTMLElement | null;
+        // We no longer cancel immediately when starting on a scrollable area.
+        // Instead, we remember it and decide in onTouchMove based on gesture
+        // direction (vertical vs horizontal).
+        touchHasScrollableAncestor = !!(targetEl && hasVerticalScrollableAncestor(targetEl));
+
+        // Cancel any auto-scroll when user starts interacting.
+        if (isAutoScrolling) {
+            isAutoScrolling = false;
+            target = container.scrollLeft;
+            current = container.scrollLeft;
+        }
+
+        touchActive = true;
+        touchCancelled = false;
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchStartScrollLeft = container.scrollLeft;
+    }
+
+    function onTouchMove(e: TouchEvent) {
+        if (window.innerWidth > 768) return;
+        if (!touchActive || touchCancelled) return;
+
+        const moveX = e.touches[0].clientX;
+        const moveY = e.touches[0].clientY;
+
+        const xDiff = touchStartX - moveX;
+        const yDiff = touchStartY - moveY;
+
+        const absX = Math.abs(xDiff);
+        const absY = Math.abs(yDiff);
+
+        // If the gesture becomes primarily vertical *and* started over a
+        // vertically scrollable region, cancel horizontal snapping so the
+        // inner content can scroll naturally.
+        if (touchHasScrollableAncestor && absY > absX && absY > 10) {
+            touchCancelled = true;
+            return;
+        }
+
+        // If the gesture is clearly horizontal, prevent the browser from
+        // trying to do vertical/bounce scrolling that fights our snapping.
+        if (absX > absY && absX > 10) {
+            e.preventDefault();
+        }
+    }
+
+    function onTouchEnd(e: TouchEvent) {
+        if (window.innerWidth > 768) return;
+        if (!touchActive || touchCancelled) {
+            touchActive = false;
+            return;
+        }
+
+        touchActive = false;
+
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+
+        const xDiff = touchStartX - touchEndX;
+        const yDiff = touchStartY - touchEndY;
+
+        // Require a mostly-horizontal swipe and a minimum distance
+        if (!(Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 40)) {
+            return;
+        }
+
+        const sectionWidth = container.clientWidth || 1;
+
+        // Base index on where the gesture started so the movement is predictable.
+        const startIndex = Math.round(touchStartScrollLeft / sectionWidth);
+        let nextIndex = startIndex;
+
+        if (xDiff > 0) {
+            // Swiped left → next page
+            nextIndex = startIndex + 1;
+        } else {
+            // Swiped right → previous page
+            nextIndex = startIndex - 1;
+        }
+
+        const maxIndex = Math.max(
+            0,
+            Math.round((container.scrollWidth - container.clientWidth) / sectionWidth)
+        );
+        nextIndex = Math.max(0, Math.min(nextIndex, maxIndex));
+
+        const targetPos = nextIndex * sectionWidth;
+        // Smoothly scroll to the target page index (800ms duration)
+        scrollTo(targetPos, false, 800);
+    }
 
     // RAF loop for smooth interpolation
     function update(timestamp: number) {
@@ -139,6 +277,11 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
 
     // Attach listeners (passive: false for preventDefault)
     container.addEventListener('wheel', onWheel, { passive: false });
+    container.addEventListener('touchstart', onTouchStart, { passive: true });
+    // touchmove MUST be non-passive so we can preventDefault()
+    // when we detect a strong horizontal swipe.
+    container.addEventListener('touchmove', onTouchMove, { passive: false });
+    container.addEventListener('touchend', onTouchEnd, { passive: true });
     window.addEventListener('resize', onResize);
 
     // Expose scrollTo control
@@ -165,6 +308,9 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
     const cleanup = () => {
         cancelAnimationFrame(rafId);
         container.removeEventListener('wheel', onWheel);
+        container.removeEventListener('touchstart', onTouchStart);
+        container.removeEventListener('touchmove', onTouchMove);
+        container.removeEventListener('touchend', onTouchEnd);
         window.removeEventListener('resize', onResize);
     };
 
