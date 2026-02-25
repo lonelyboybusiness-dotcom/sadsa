@@ -291,7 +291,11 @@ const Services = ({ id = 'services' }: ServicesProps) => {
         <section
             id={id}
             className="h-[100dvh] w-full flex flex-col items-center justify-start bg-background flex-shrink-0 relative overflow-hidden"
-            style={{ paddingTop: '4rem' }}
+            style={{
+                // Match navbar-safe padding so the title never hides behind the fixed nav,
+                // even when the page is zoomed or viewport height is small.
+                paddingTop: 'max(80px, 10dvh)',
+            }}
         >
             {/* Inner wrapper — centers content in the remaining height below navbar */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: 'calc(100dvh - 4rem)', paddingBottom: isMobile ? '2vh' : '4vh', paddingTop: '1vh' }}>
