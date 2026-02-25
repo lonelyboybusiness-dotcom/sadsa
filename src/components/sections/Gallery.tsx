@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import InteractiveVideo from '../ui/InteractiveVideo';
 
 interface GalleryProps {
   id?: string;
@@ -361,15 +362,17 @@ const Gallery = ({ id = 'gallery', className }: GalleryProps) => {
         <div className="gallery-video-grid">
           <div className="gallery-video-card gallery-video-card--top">
             {topVideo?.youtube_url ? (
-              <iframe
-                width="100%"
-                height="100%"
-                src={`https://www.youtube.com/embed/${getYouTubeId(topVideo.youtube_url)}?${embedParams}`}
-                title="Visual Diary Main"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+              <InteractiveVideo>
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`https://www.youtube.com/embed/${getYouTubeId(topVideo.youtube_url)}?${embedParams}`}
+                  title="Visual Diary Main"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </InteractiveVideo>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-white/50 bg-neutral-900">
                 <span className="mb-2">Main Video Slot (Top)</span>
@@ -381,15 +384,17 @@ const Gallery = ({ id = 'gallery', className }: GalleryProps) => {
           <div className="gallery-video-row">
             <div className="gallery-video-card gallery-video-card--small">
               {leftVideo?.youtube_url ? (
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${getYouTubeId(leftVideo.youtube_url)}?${embedParams}`}
-                  title="Visual Diary Left"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                <InteractiveVideo>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${getYouTubeId(leftVideo.youtube_url)}?${embedParams}`}
+                    title="Visual Diary Left"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </InteractiveVideo>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-white/50 bg-neutral-900">
                   <span className="mb-2">Left Slot</span>
@@ -400,15 +405,17 @@ const Gallery = ({ id = 'gallery', className }: GalleryProps) => {
 
             <div className="gallery-video-card gallery-video-card--small">
               {rightVideo?.youtube_url ? (
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`https://www.youtube.com/embed/${getYouTubeId(rightVideo.youtube_url)}?${embedParams}`}
-                  title="Visual Diary Right"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+                <InteractiveVideo>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${getYouTubeId(rightVideo.youtube_url)}?${embedParams}`}
+                    title="Visual Diary Right"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </InteractiveVideo>
               ) : (
                 <div className="flex flex-col items-center justify-center h-full text-white/50 bg-neutral-900">
                   <span className="mb-2">Right Slot</span>

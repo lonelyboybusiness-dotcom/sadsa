@@ -11,7 +11,7 @@ interface ContactProps {
 }
 
 const inputClass =
-    "w-full h-[42px] md:h-[52px] bg-white/50 rounded-full px-4 md:px-5 text-[13px] md:text-sm text-text placeholder:text-muted/60 focus:outline-none backdrop-blur-sm transition-all duration-200";
+    "w-full h-[30px] md:h-[52px] bg-white/50 rounded-[5px] px-3 md:px-5 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200";
 
 const Contact = ({ id = "contact", className }: ContactProps) => {
     const [status, setStatus] = useState<"idle" | "success">("idle");
@@ -104,36 +104,51 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
 
             <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent pointer-events-none z-1" />
 
-            <div className="w-full h-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center">
-                <div className="w-full max-w-[450px] md:max-w-[550px]">
+            {/* Centered Heading */}
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="absolute top-[120px] md:top-[180px] xl:top-[220px] left-0 w-full z-20 flex flex-col items-center justify-center px-4"
+            >
+                <h2
+                    className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
+                    style={{
+                        fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+                        textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
+                        color: '#ffffffff',
+                        paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+                        letterSpacing: '0.12em',
+                    }}
+                >
+                    get in touch.
+                </h2>
+                {/* Decorative accent line */}
+                <div
+                    className="flex-shrink-0"
+                    style={{
+                        width: 'clamp(200px, 38vw, 600px)',
+                        height: '3px',
+                        background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
+                        borderRadius: '9999px',
+                    }}
+                />
+            </motion.div>
 
-                    {/* Eyebrow + Heading */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="mb-4"
-                    >
-                        <span className="text-accent text-[10px] uppercase tracking-[0.3em] font-mono mb-2 block">
-                            Get in Touch
-                        </span>
-                        <h2 className="text-2xl md:text-5xl font-display font-bold text-text leading-[1.1]">
-                            Let's Create<br />
-                            <span className="text-accent">Together</span>
-                        </h2>
-                    </motion.div>
+            <div className="w-full h-full max-w-[1400px] mx-auto px-4 md:px-12 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center pt-[100px] md:pt-[150px]">
+                <div className="w-full max-w-[450px] md:max-w-[550px]">
 
                     {/* Form Card */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="bg-white/20 backdrop-blur-xl rounded-2xl p-4 md:p-8 shadow-xl"
+                        className="bg-white/20 backdrop-blur-xl rounded-2xl p-2.5 md:p-8 shadow-xl"
                     >
                         <form onSubmit={handleSubmit} className="contact-form">
 
                             {/* Name */}
-                            <div style={{ marginBottom: "6px" }}>
+                            <div style={{ marginBottom: "16px" }}>
                                 <input
                                     type="text"
                                     placeholder="Name"
@@ -143,7 +158,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </div>
 
                             {/* Email */}
-                            <div style={{ marginBottom: "6px" }}>
+                            <div style={{ marginBottom: "16px" }}>
                                 <input
                                     type="email"
                                     placeholder="Email"
@@ -153,7 +168,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </div>
 
                             {/* Project Type */}
-                            <div style={{ marginBottom: "6px" }}>
+                            <div style={{ marginBottom: "16px" }}>
                                 <input
                                     type="text"
                                     placeholder="Project Type"
@@ -162,47 +177,42 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                             </div>
 
                             {/* Message */}
-                            <div style={{ marginBottom: "6px" }}>
+                            <div style={{ marginBottom: "16px" }}>
                                 <textarea
                                     rows={1}
                                     placeholder="Message"
-                                    className="w-full bg-white/50 rounded-full px-4 md:px-5 py-2.5 md:py-3 text-[13px] md:text-sm text-text placeholder:text-muted/60 focus:outline-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed min-h-[42px] md:min-h-[52px]"
+                                    className="w-full bg-white/50 rounded-[5px] px-3 md:px-5 py-1.5 md:py-3 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed min-h-[30px] md:min-h-[52px]"
                                 />
                             </div>
 
                             <button
                                 type="submit"
-                                className="group flex items-center gap-3 md:gap-4 px-8 md:px-12 h-11 md:h-16 bg-white/20 backdrop-blur-xl text-text font-black uppercase tracking-[0.2em] text-[11px] md:text-[14px] rounded-full hover:bg-white/30 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:scale-[1.02] mb-4 md:mb-6 shadow-lg"
+                                style={{ marginBottom: "16px" }}
+                                className="group flex w-max items-center justify-center min-w-[120px] md:min-w-[160px] h-[36px] md:h-[52px] px-8 md:px-14 bg-white/20 backdrop-blur-xl text-text font-black uppercase tracking-[0.2em] text-[10px] md:text-[14px] rounded-full border-none outline-none hover:bg-white/30 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:scale-[1.02] shadow-lg"
                             >
-                                <span>SEND MESSAGE</span>
-                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                                <span>Submit</span>
                             </button>
 
                             {/* Contact Details (Large) */}
-                            <div className="flex flex-col gap-2 mt-2 md:mt-3 px-2">
-                                <div className="flex items-start gap-2 md:gap-3 text-sm md:text-base font-medium text-text/80 leading-relaxed max-w-[90%]">
+                            <div className="flex flex-col gap-1.5 md:gap-2 mt-2 md:mt-3 px-2">
+                                <div className="flex items-start gap-2 md:gap-3 text-[10px] md:text-base font-medium text-text/80 leading-tight md:leading-relaxed max-w-[95%] md:max-w-[90%]">
                                     <span>15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik Park, Chembur, Mumbai, Maharashtra 400071</span>
                                 </div>
-                                <div className="flex items-center gap-2 md:gap-3 text-base md:text-xl font-bold text-text">
-                                    <a
-                                        href="https://wa.me/919819886633"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="hover:text-accent transition-colors"
-                                    >
+                                <div className="flex items-center gap-2 md:gap-3 text-xs md:text-xl font-bold text-black">
+                                    <span className="text-black">
                                         +91 98198 86633
-                                    </a>
+                                    </span>
                                 </div>
-                                <div className="flex items-center gap-2 md:gap-3 text-base md:text-xl font-bold text-text">
-                                    <a href="mailto:studio@aakritcinematic.in" className="hover:text-accent transition-colors">
+                                <div className="flex items-center gap-2 md:gap-3 text-xs md:text-xl font-bold text-black">
+                                    <span className="text-black">
                                         studio@aakritcinematic.in
-                                    </a>
+                                    </span>
                                 </div>
                             </div>
 
                             {/* Success message */}
                             {status === "success" && (
-                                <p className="mt-4 text-accent text-xs uppercase tracking-[0.25em]">
+                                <p className="mt-2 md:mt-4 text-accent text-[10px] md:text-xs uppercase tracking-[0.25em]">
                                     Message sent — we'll reply within 24 hours.
                                 </p>
                             )}
@@ -214,9 +224,9 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.5, duration: 0.5 }}
-                        className="mt-6 text-muted/50 text-xs"
+                        className="mt-4 md:mt-6 text-muted/50 text-[10px] md:text-xs"
                     >
-                        © 2024 Aakrit Cinematic Solutions. All rights reserved.
+                        © 2026 Aakrit Cinematic Solutions. All rights reserved.
                     </motion.p>
                 </div>
             </div>

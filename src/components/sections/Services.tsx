@@ -126,21 +126,31 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
         <motion.div
             ref={cardRef}
             className="service-card"
-            variants={{
+            variants={isMobile ? {
+                hidden: { opacity: 0, y: 28, scale: 0.95 },
+                visible: {
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                    boxShadow: [
+                        "0 0 12px rgba(255, 140, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4)",
+                        "0 0 22px rgba(254, 168, 0, 0.28), 0 4px 16px rgba(0, 0, 0, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.5)",
+                        "0 0 12px rgba(255, 140, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4)"
+                    ],
+                    transition: {
+                        duration: 0.5,
+                        ease: [0.22, 1, 0.36, 1],
+                        boxShadow: { repeat: Infinity, duration: 3.5, ease: "easeInOut" }
+                    }
+                },
+                cardHover: {},
+            } : {
                 hidden: { opacity: 0, y: 28, scale: 0.95 },
                 visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
                 cardHover: {},
             }}
             whileTap={isMobile ? { scale: 0.95, transition: { duration: 0.1 } } : undefined}
             whileHover={!isPhone ? 'cardHover' : undefined}
-            animate={isMobile ? {
-                boxShadow: [
-                    "0 0 12px rgba(255, 140, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4)",
-                    "0 0 22px rgba(254, 168, 0, 0.28), 0 4px 16px rgba(0, 0, 0, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.5)",
-                    "0 0 12px rgba(255, 140, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4)"
-                ]
-            } : undefined}
-            transition={isMobile ? { repeat: Infinity, duration: 3.5, ease: "easeInOut" } : undefined}
             style={{
                 background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.16) 100%)',
                 backdropFilter: 'blur(8px) saturate(1.2)',
@@ -149,13 +159,13 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
                 borderTop: '1.5px solid rgba(255, 255, 255, 0.5)',
                 borderLeft: '1px solid rgba(255, 255, 255, 0.4)',
                 borderRadius: 'clamp(10px, 1.5vw, 18px)',
-                padding: isMobile
-                    ? '22px 0.7rem 0.7rem'
-                    : 'clamp(0.7rem, 1.5vw, 1.4rem) clamp(0.7rem, 1.2vw, 1.2rem)',
+                padding: isMobile && isPhone
+                    ? '16px 0.5rem 0.5rem' : isMobile && !isPhone ? '24px 1rem 1rem'
+                        : 'clamp(0.7rem, 1.5vw, 1.4rem) clamp(0.7rem, 1.2vw, 1.2rem)',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'flex-start',
-                gap: 'clamp(0.3rem, 0.6vw, 0.6rem)',
+                gap: isMobile && isPhone ? '0.2rem' : isMobile && !isPhone ? '0.6rem' : 'clamp(0.3rem, 0.6vw, 0.6rem)',
                 boxShadow: '0 0 12px rgba(255, 140, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
                 position: 'relative',
                 overflow: 'visible',
@@ -167,35 +177,34 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
             {/* Icon — propagates cardHover from parent card on desktop/iPad, loops on phone */}
             <motion.div
                 className="service-icon"
-                variants={!isPhone ? {
+                variants={isPhone ? {
+                    visible: {
+                        y: [0, -8, 0],
+                        filter: [
+                            "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
+                            "drop-shadow(0px 4px 14px rgba(254, 168, 0, 0.7)) drop-shadow(0px 0px 8px rgba(254, 168, 0, 0.4))",
+                            "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))"
+                        ],
+                        transition: { repeat: Infinity, duration: 2.8, ease: "easeInOut" }
+                    }
+                } : {
                     visible: {
                         y: 0,
-                        filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))"
+                        filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
+                        transition: { duration: 0.3, ease: "easeOut" }
                     },
                     cardHover: {
                         y: -10,
-                        filter: "drop-shadow(0px 6px 18px rgba(254, 168, 0, 0.9)) drop-shadow(0px 0px 12px rgba(254, 168, 0, 0.55))"
+                        filter: "drop-shadow(0px 6px 18px rgba(254, 168, 0, 0.9)) drop-shadow(0px 0px 12px rgba(254, 168, 0, 0.55))",
+                        transition: { duration: 0.3, ease: "easeOut" }
                     },
-                } : undefined}
-                animate={isPhone ? {
-                    y: [0, -8, 0],
-                    filter: [
-                        "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
-                        "drop-shadow(0px 4px 14px rgba(254, 168, 0, 0.7)) drop-shadow(0px 0px 8px rgba(254, 168, 0, 0.4))",
-                        "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))"
-                    ]
-                } : undefined}
-                transition={
-                    isPhone
-                        ? { repeat: Infinity, duration: 2.8, ease: "easeInOut" }
-                        : { duration: 0.3, ease: "easeOut" }
-                }
+                }}
                 style={{
                     position: 'absolute',
-                    top: isMobile ? '-14px' : 'clamp(-30px, -4vw, -45px)',
-                    left: isMobile ? '10px' : 'clamp(5px, 1vw, 15px)',
-                    width: isMobile ? '28px' : 'clamp(30px, 3.5vw, 50px)',
-                    height: isMobile ? '28px' : 'clamp(30px, 3.5vw, 50px)',
+                    top: isMobile ? '-12px' : 'clamp(-30px, -4vw, -45px)',
+                    left: isMobile ? '8px' : 'clamp(5px, 1vw, 15px)',
+                    width: isMobile ? '22px' : 'clamp(30px, 3.5vw, 50px)',
+                    height: isMobile ? '22px' : 'clamp(30px, 3.5vw, 50px)',
                     zIndex: 10,
                 }}
             >
@@ -224,7 +233,7 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
                         color: '#000000',
                         fontFamily: 'Calisto, serif',
                         fontWeight: 700,
-                        fontSize: 'clamp(0.65rem, 1.15vw, 1.1rem)',
+                        fontSize: isMobile && isPhone ? '0.55rem' : isMobile && !isPhone ? '1.1rem' : 'clamp(0.65rem, 1.15vw, 1.1rem)',
                         lineHeight: 1.25,
                         letterSpacing: '0.04em',
                         textTransform: 'uppercase',
@@ -237,7 +246,7 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
                         style={{
                             color: '#000000ff',
                             fontFamily: 'Calisto, serif',
-                            fontSize: 'clamp(0.55rem, 0.95vw, 0.9rem)',
+                            fontSize: isMobile && isPhone ? '0.45rem' : isMobile && !isPhone ? '0.9rem' : 'clamp(0.55rem, 0.95vw, 0.9rem)',
                             letterSpacing: '0.06em',
                             marginTop: '1px',
                         }}
@@ -252,8 +261,8 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
                 style={{
                     color: 'rgba(0,0,0,0.65)',
                     fontFamily: 'Calisto, serif',
-                    fontSize: 'clamp(0.5rem, 0.8vw, 0.82rem)',
-                    lineHeight: 1.5,
+                    fontSize: isMobile && isPhone ? '0.45rem' : isMobile && !isPhone ? '0.85rem' : 'clamp(0.5rem, 0.8vw, 0.82rem)',
+                    lineHeight: isMobile && isPhone ? 1.3 : 1.5,
                     letterSpacing: '0.02em',
                 }}
             >
@@ -278,6 +287,7 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
 
 const Services = ({ id = 'services' }: ServicesProps) => {
     const isMobile = useMediaQuery('(max-width: 1023px)');
+    const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1023px)');
     const isPhone = useMediaQuery('(max-width: 767px)');
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -289,17 +299,17 @@ const Services = ({ id = 'services' }: ServicesProps) => {
             style={{ paddingTop: '4rem' }}
         >
             {/* Inner wrapper — centers content in the remaining height below navbar */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: 'calc(100dvh - 4rem)', paddingBottom: '4vh', paddingTop: '1vh' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: 'calc(100dvh - 4rem)', paddingBottom: isMobile ? '2vh' : '4vh', paddingTop: '1vh' }}>
 
 
                 {/* Title */}
                 <h2
                     className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
                     style={{
-                        fontSize: 'clamp(1.8rem, 5.5vw, 6rem)',
+                        fontSize: isMobile ? '1.5rem' : 'clamp(1.8rem, 5.5vw, 6rem)',
                         textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
                         color: '#ffffffff',
-                        paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+                        paddingBottom: isMobile ? '0.2rem' : 'clamp(0.3rem, 0.8vh, 0.8rem)',
                         letterSpacing: '0.12em',
                     }}
                 >
@@ -310,11 +320,11 @@ const Services = ({ id = 'services' }: ServicesProps) => {
                 <div
                     className="flex-shrink-0"
                     style={{
-                        width: 'clamp(200px, 38vw, 600px)',
+                        width: isMobile ? '140px' : 'clamp(200px, 38vw, 600px)',
                         height: '3px',
                         background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
                         borderRadius: '9999px',
-                        marginBottom: 'clamp(1.2rem, 3vh, 3rem)',
+                        marginBottom: isMobile ? '0.8rem' : 'clamp(1.2rem, 3vh, 3rem)',
                     }}
                 />
 
@@ -331,12 +341,13 @@ const Services = ({ id = 'services' }: ServicesProps) => {
                     style={{
                         display: 'grid',
                         gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(5, 1fr)',
-                        gap: 'clamp(0.75rem, 1.8vw, 2rem)',
+                        gap: isTablet ? '1rem' : isMobile ? '0.4rem' : 'clamp(0.75rem, 1.8vw, 2rem)',
                         width: '100%',
                         maxWidth: '1300px',
-                        padding: 'clamp(1rem, 2vh, 2rem) clamp(1rem, 4vw, 4rem) clamp(1.5rem, 3vh, 3rem)',
+                        height: isTablet ? '68dvh' : 'auto',
+                        padding: isTablet ? '1rem 3vw 2rem' : isMobile ? '0.2rem 1rem 1rem' : 'clamp(1rem, 2vh, 2rem) clamp(1rem, 4vw, 4rem) clamp(1.5rem, 3vh, 3rem)',
                         flex: 'none',
-                        alignContent: 'center',
+                        alignContent: isTablet ? 'stretch' : 'center',
                     }}
                 >
                     {services.map((service) => (

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import { type WheelEvent, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
+import InteractiveVideo from '../ui/InteractiveVideo';
 
 interface Video {
   id: number;
@@ -363,27 +364,10 @@ function Portfolio({ id = 'portfolio', className }: { id?: string; className?: s
     return Array.from({ length: slotCount }, (_, index) => videos[index] ?? null);
   }, [videos]);
 
-  const handleSectionWheelCapture = (event: WheelEvent<HTMLElement>) => {
-    const section = event.currentTarget;
-    const hasVerticalOverflow = section.scrollHeight > section.clientHeight;
-    if (!hasVerticalOverflow) return;
-
-    const atTop = section.scrollTop <= 0;
-    const atBottom = Math.ceil(section.scrollTop + section.clientHeight) >= section.scrollHeight;
-    const scrollingUp = event.deltaY < 0;
-    const scrollingDown = event.deltaY > 0;
-    const handoffToHorizontal = (atTop && scrollingUp) || (atBottom && scrollingDown);
-
-    if (!handoffToHorizontal) {
-      event.stopPropagation();
-    }
-  };
-
   return (
     <section
       id={id}
       className={clsx('portfolio-section h-screen w-screen bg-background flex-shrink-0 relative', className)}
-      onWheelCapture={handleSectionWheelCapture}
     >
       <style>{portfolioStyles}</style>
 
@@ -427,12 +411,14 @@ function Portfolio({ id = 'portfolio', className }: { id?: string; className?: s
             return (
               <div className="portfolio-card" key={video?.id ?? `portfolio-slot-${index}`}>
                 {videoId ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${videoId}?${EMBED_PARAMS}`}
-                    title={video?.Title || `Portfolio Video ${index + 1}`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
+                  <InteractiveVideo>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${videoId}?${EMBED_PARAMS}`}
+                      title={video?.Title || `Portfolio Video ${index + 1}`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </InteractiveVideo>
                 ) : (
                   <div className="portfolio-card-placeholder" />
                 )}

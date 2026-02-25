@@ -2,12 +2,15 @@ import { motion } from "framer-motion";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
+import InteractiveVideo from "../ui/InteractiveVideo";
+import useMediaQuery from "../../hooks/useMediaQuery";
 interface ClientsProps {
     id?: string;
     className?: string;
 }
 
 const Clients = ({ id = "clients", className }: ClientsProps) => {
+    const isMobile = useMediaQuery('(max-width: 1023px)');
     const [fetchedLogos, setFetchedLogos] = useState<{ src: string; alt: string }[]>([]);
     const [fetchedVideos, setFetchedVideos] = useState<{ id: number; youtubeId: string; title: string }[]>([]);
 
@@ -119,6 +122,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                     .desktop-video-row::-webkit-scrollbar { display: none; }
                     .mobile-video-grid { display: none !important; }
                     .client-logo { height: 2.5rem; }
+                    .clients-grid { gap: 4rem; padding-right: 4rem; } 
                 }
             `}</style>
 
@@ -129,18 +133,18 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
             {/* Heading + Videos */}
             <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 mb-10">
-                <div className="flex flex-col items-center text-center">
-                    <div className="inline-flex flex-col items-stretch mb-[clamp(1.2rem,3vh,3rem)]">
+                <div className="flex flex-col items-center justify-center text-center">
+                    <div className="inline-flex flex-col items-center justify-center mb-[clamp(1.2rem,3vh,3rem)]">
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             className="font-display font-bold tracking-widest leading-none text-center flex-shrink-0"
                             style={{
-                                fontSize: 'clamp(1.2rem, 3.5vw, 4.5rem)',
+                                fontSize: isMobile ? '1.5rem' : 'clamp(1.8rem, 5.5vw, 6rem)',
                                 textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
                                 color: '#ffffffff',
-                                paddingBottom: 'clamp(0.3rem, 0.8vh, 0.8rem)',
+                                paddingBottom: isMobile ? '0.2rem' : 'clamp(0.3rem, 0.8vh, 0.8rem)',
                                 letterSpacing: '0.12em',
                             }}
                         >
@@ -151,7 +155,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                         <div
                             className="flex-shrink-0"
                             style={{
-                                width: '100%',
+                                width: isMobile ? '140px' : 'clamp(200px, 38vw, 600px)',
                                 height: '3px',
                                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent)',
                                 borderRadius: '9999px',
@@ -191,13 +195,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                         background: `linear-gradient(150deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0.02) 36%, rgba(255, 255, 255, 0) 58%), radial-gradient(120% 85% at 50% -18%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(110% 92% at 50% 118%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%)`
                                     }} />
 
-                                    <iframe
-                                        className="relative z-0"
-                                        style={{ width: "100%", height: "100%", border: "none" }}
-                                        src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0&controls=1`}
-                                        title={video.title}
-                                        allowFullScreen
-                                    />
+                                    <InteractiveVideo className="relative z-0">
+                                        <iframe
+                                            style={{ width: "100%", height: "100%", border: "none" }}
+                                            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0&controls=1`}
+                                            title={video.title}
+                                            allowFullScreen
+                                        />
+                                    </InteractiveVideo>
                                 </div>
 
                                 {/* 4. REFINED DATA TAG */}
@@ -232,12 +237,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                         <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 opacity-80" style={{
                                             background: `linear-gradient(150deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0.02) 36%, rgba(255, 255, 255, 0) 58%), radial-gradient(120% 85% at 50% -18%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(110% 92% at 50% 118%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%)`
                                         }} />
-                                        <iframe
-                                            style={{ width: "100%", height: "100%", border: "none" }}
-                                            src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0&controls=1`}
-                                            title={video.title}
-                                            allowFullScreen
-                                        />
+                                        <InteractiveVideo className="relative z-0">
+                                            <iframe
+                                                style={{ width: "100%", height: "100%", border: "none" }}
+                                                src={`https://www.youtube.com/embed/${video.youtubeId}?modestbranding=1&rel=0&controls=1`}
+                                                title={video.title}
+                                                allowFullScreen
+                                            />
+                                        </InteractiveVideo>
                                     </div>
                                 </div>
                             ))}
@@ -260,12 +267,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                                         <div className="absolute inset-0 rounded-inherit pointer-events-none z-10 opacity-80" style={{
                                             background: `linear-gradient(150deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.12) 18%, rgba(255, 255, 255, 0.02) 36%, rgba(255, 255, 255, 0) 58%), radial-gradient(120% 85% at 50% -18%, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 62%), radial-gradient(110% 92% at 50% 118%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 68%)`
                                         }} />
-                                        <iframe
-                                            style={{ width: "100%", height: "100%", border: "none" }}
-                                            src={`https://www.youtube.com/embed/${fetchedVideos[2].youtubeId}?modestbranding=1&rel=0&controls=1`}
-                                            title={fetchedVideos[2].title}
-                                            allowFullScreen
-                                        />
+                                        <InteractiveVideo className="relative z-0">
+                                            <iframe
+                                                style={{ width: "100%", height: "100%", border: "none" }}
+                                                src={`https://www.youtube.com/embed/${fetchedVideos[2].youtubeId}?modestbranding=1&rel=0&controls=1`}
+                                                title={fetchedVideos[2].title}
+                                                allowFullScreen
+                                            />
+                                        </InteractiveVideo>
                                     </div>
                                 </div>
                             </div>
@@ -276,14 +285,14 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
 
             {/* ── ORANGE PILL LOGO SCROLLER ── */}
             <div className="relative z-10 w-full mt-8 md:mt-12 bg-black py-10 md:py-16">
-                <div className="px-[5vw] mb-6 md:mb-8 text-center md:text-left">
-                    <h3 className="text-white/20 text-lg md:text-3xl font-bold tracking-tighter uppercase italic leading-none">
+                <div className="px-[5vw] mb-6 md:mb-8 text-center flex justify-center">
+                    <h3 className="text-white/20 text-lg md:text-3xl font-bold tracking-tighter uppercase italic leading-none text-center">
                         WE WORKED WITH
                     </h3>
                 </div>
 
                 {/* Orange Pill Container */}
-                <div className="mx-auto w-[85%] md:w-[72%] mt-[2vh] md:mt-[4vh] max-w-6xl">
+                <div className="mx-auto w-[90%] md:w-[75%] lg:w-[60%] mt-[2vh] md:mt-[4vh] max-w-5xl">
                     <div className="relative h-[60px] md:h-[80px] bg-[#f59e0b] px-6 md:px-12 rounded-[30px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
                             {[0, 1, 2, 3, 4, 5].map((i) => (
