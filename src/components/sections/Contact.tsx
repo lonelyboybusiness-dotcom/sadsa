@@ -199,22 +199,6 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                 <span>Submit</span>
                             </button>
 
-                            {/* Contact Details */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '32px', paddingLeft: '8px' }}>
-                                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.7)', lineHeight: 1.5 }}>
-                                    <MapPin style={{ width: '14px', height: '14px', flexShrink: 0, marginTop: '2px' }} strokeWidth={1.5} />
-                                    <span>15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik Park, Chembur, Mumbai, Maharashtra 400071</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, color: '#000' }}>
-                                    <Phone style={{ width: '14px', height: '14px', flexShrink: 0 }} strokeWidth={1.5} />
-                                    <span>+91 98198 86633</span>
-                                </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, color: '#000' }}>
-                                    <Mail style={{ width: '14px', height: '14px', flexShrink: 0 }} strokeWidth={1.5} />
-                                    <span>studio@aakritcinematic.in</span>
-                                </div>
-                            </div>
-
                             {/* Success message */}
                             {status === "success" && (
                                 <p className="mt-2 md:mt-4 text-accent text-[10px] md:text-xs uppercase tracking-[0.25em]">
@@ -222,6 +206,44 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                 </p>
                             )}
                         </form>
+                    </motion.div>
+
+                    {/* Glassy Contact Details */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.5 }}
+                        className="mt-5 md:mt-6 bg-white/20 backdrop-blur-xl rounded-2xl px-4 py-5 md:px-6 md:py-6 shadow-xl"
+                    >
+                        <div className="flex flex-col gap-4 text-[11px] md:text-xs tracking-[0.16em] text-black/70">
+                            <div className="flex flex-col gap-1">
+                                <span className="uppercase font-semibold text-[10px] md:text-[11px] tracking-[0.22em] text-black/60">
+                                    Call us
+                                </span>
+                                <span className="text-sm md:text-base font-bold text-black tracking-normal">
+                                    98198 86633
+                                </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <span className="uppercase font-semibold text-[10px] md:text[11px] tracking-[0.22em] text-black/60">
+                                    Email us
+                                </span>
+                                <span className="text-xs md:text-sm font-bold text-black">
+                                    studio@aakritcinematic.in
+                                </span>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <span className="uppercase font-semibold text-[10px] md:text-[11px] tracking-[0.22em] text-black/60">
+                                    Visit us
+                                </span>
+                                <span className="text-[11px] md:text-xs font-medium text-black leading-relaxed">
+                                    15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik
+                                    Park, Chembur, Mumbai, Maharashtra 400071
+                                </span>
+                            </div>
+                        </div>
                     </motion.div>
 
                     {/* Footer */}

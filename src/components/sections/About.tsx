@@ -108,47 +108,35 @@ const About = ({ id = 'about', className }: AboutProps) => {
                 >
                     {/* Header */}
                     <motion.div variants={itemVariants} className="flex flex-col items-center w-full flex-shrink-0" style={{ marginBottom: titleMargin }}>
-                        <h2 style={{
-                            margin: 0,
-                            lineHeight: 1,
+                    <h2 style={{
+                        margin: 0,
+                        lineHeight: 1,
+                        fontWeight: 400,
+                        display: 'inline-block',
+                        whiteSpace: 'nowrap',
+                        position: 'relative',
+                    }}>
+                        <span style={{
+                            fontFamily: RETROICA,
+                            fontSize: isMobile ? 'clamp(1.2rem, 3.5dvh, 1.5rem)' : 'clamp(1.8rem, 5.5vw, 6rem)',
+                            letterSpacing: '-0.02em',
+                            color: '#FFFFFF',
+                            textTransform: 'lowercase',
                             fontWeight: 400,
-                            display: 'inline-block',
-                            whiteSpace: 'nowrap',
-                            position: 'relative',
+                            textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
                         }}>
-                            <span style={{
-                                fontFamily: RETROICA,
-                                fontSize: isMobile ? 'clamp(1.2rem, 3.5dvh, 1.5rem)' : 'clamp(1.8rem, 5.5vw, 6rem)',
-                                letterSpacing: '-0.02em',
-                                color: '#FFFFFF',
-                                textTransform: 'lowercase',
-                                fontWeight: 400,
-                                textShadow: `
-                                     0 0 8px rgba(255, 165, 0, 0.5),
-                                     0 0 16px rgba(255, 165, 0, 0.35),
-                                     0 0 30px rgba(255, 165, 0, 0.25),
-                                     0 0 50px rgba(255, 165, 0, 0.15),
-                                     0 0 70px rgba(255, 165, 0, 0.08)
-                                 `,
-                            }}>
-                                about us
-                            </span>
-                            <span style={{
-                                fontFamily: RETROICA,
-                                fontSize: isMobile ? 'clamp(1.2rem, 3.5dvh, 1.5rem)' : 'clamp(1.8rem, 5.5vw, 6rem)',
-                                color: '#FFFFFF',
-                                fontWeight: 400,
-                                textShadow: `
-                                     0 0 8px rgba(255, 165, 0, 0.5),
-                                     0 0 16px rgba(255, 165, 0, 0.35),
-                                     0 0 30px rgba(255, 165, 0, 0.25),
-                                     0 0 50px rgba(255, 165, 0, 0.15),
-                                     0 0 70px rgba(255, 165, 0, 0.08)
-                                 `,
-                            }}>
-                                .
-                            </span>
-                        </h2>
+                            about us
+                        </span>
+                        <span style={{
+                            fontFamily: RETROICA,
+                            fontSize: isMobile ? 'clamp(1.2rem, 3.5dvh, 1.5rem)' : 'clamp(1.8rem, 5.5vw, 6rem)',
+                            color: '#FFFFFF',
+                            fontWeight: 400,
+                            textShadow: '3px 3px 8px rgba(255, 100, 0, 0.5), 0 0 40px rgba(255, 140, 0, 0.7), 0 0 80px rgba(255, 140, 0, 0.35)',
+                        }}>
+                            .
+                        </span>
+                    </h2>
 
                         <div style={{
                             position: 'relative',
