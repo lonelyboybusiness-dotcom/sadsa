@@ -11,11 +11,16 @@ interface ContactProps {
     className?: string;
 }
 
-const inputClass =
-    "w-full h-[30px] md:h-[52px] bg-white/50 rounded-[5px] !px-4 md:!px-6 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200";
-
 const Contact = ({ id = "contact", className }: ContactProps) => {
-    const [status, setStatus] = useState<"idle" | "success">("idle");
+    const [status, setStatus] = useState<
+        "idle" | "success" | "error" | "submitting"
+    >("idle");
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        projectType: "",
+        message: "",
+    });
     const [lane1Images, setLane1Images] = useState<string[]>([]);
     const [lane2Images, setLane2Images] = useState<string[]>([]);
     const timeoutRef = useRef<number | null>(null);
@@ -74,11 +79,42 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
         fetchImages();
     }, []);
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setStatus("success");
-        if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-        timeoutRef.current = window.setTimeout(() => setStatus("idle"), 4000);
+        setStatus("submitting");
+
+        try {
+            const { error } = await supabase.from("contact_form").insert([
+                {
+                    name: formData.name,
+                    email: formData.email,
+                    project_type: formData.projectType,
+                    message: formData.message,
+                },
+            ]);
+
+            if (error) throw error;
+
+            setStatus("success");
+            setFormData({ name: "", email: "", projectType: "", message: "" });
+
+            if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+            timeoutRef.current = window.setTimeout(() => setStatus("idle"), 4000);
+        } catch (err: any) {
+            console.error("Error submitting form:", err);
+            setStatus("error");
+            if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+            timeoutRef.current = window.setTimeout(() => {
+                setStatus("idle");
+            }, 6000);
+        }
+    };
+
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
     useEffect(() => {
@@ -142,83 +178,171 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                 />
             </motion.div>
 
-            <div className="w-full h-full max-w-[1400px] mx-auto px-8 sm:px-12 md:px-16 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center pt-[100px] md:pt-[150px]">
-                <div className="w-full max-w-[260px] sm:max-w-[320px] md:max-w-[420px] lg:max-w-[550px]">
+            <div className="w-full h-full max-w-[1400px] mx-auto px-6 sm:px-8 md:px-16 lg:px-24 xl:px-32 relative z-10 flex flex-col justify-center pt-[100px] md:pt-[150px]">
+                <div
+                    className={clsx(
+                        "w-full max-w-[260px] sm:max-w-[320px] md:max-w-[420px] lg:max-w-[550px]",
+                        isMobile && "mx-auto"
+                    )}
+                >
 
-                    {/* Form Card */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                    {/* Form */}
+                    <motion.form
+                        id="contactForm"
+                        onSubmit={handleSubmit}
+                        initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="bg-white/20 backdrop-blur-xl rounded-2xl p-2.5 md:p-8 shadow-xl"
+                        className="flex flex-col gap-[0.625em] w-full"
                     >
-                        <form onSubmit={handleSubmit} className="contact-form">
+                        <div className="flex flex-col gap-[0.625em] md:gap-[0.75em]">
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Name"
+                                required
+                                value={formData.name}
+                                onChange={handleInputChange}
+                                className="
+                                    w-full bg-white
+                                    border border-[rgba(255,255,255,0.5)] rounded-[0.5em]
+                                    px-[1.25em] h-[2.5em] md:h-[2.75em]
+                                    text-[#333] placeholder:text-[#333]/40
+                                    focus:outline-none focus:bg-white
+                                    focus:border-[rgba(255,180,0,0.55)]
+                                    focus:shadow-[0_0_1.2em_rgba(255,180,0,0.28)]
+                                    transition-all duration-300 text-[0.875em] md:text-[1em]
+                                    font-['Calisto_MT','Georgia',serif]
+                                "
+                            />
 
-                            {/* Name */}
-                            <div style={{ marginBottom: '24px' }}>
-                                <input
-                                    type="text"
-                                    placeholder="Name"
-                                    className={inputClass}
-                                    style={{ paddingLeft: '1.25rem' }}
-                                    required
-                                />
-                            </div>
+                            <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                required
+                                value={formData.email}
+                                onChange={handleInputChange}
+                                className="
+                                    w-full bg-white
+                                    border border-[rgba(255,255,255,0.5)] rounded-[0.5em]
+                                    px-[1.25em] h-[2.5em] md:h-[2.75em]
+                                    text-[#333] placeholder:text-[#333]/40
+                                    focus:outline-none focus:bg-white
+                                    focus:border-[rgba(255,180,0,0.55)]
+                                    focus:shadow-[0_0_1.2em_rgba(255,180,0,0.28)]
+                                    transition-all duration-300 text-[0.875em] md:text-[1em]
+                                    font-['Calisto_MT','Georgia',serif]
+                                "
+                            />
 
-                            {/* Email */}
-                            <div style={{ marginBottom: '24px' }}>
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    className={inputClass}
-                                    style={{ paddingLeft: '1.25rem' }}
-                                    required
-                                />
-                            </div>
+                            <input
+                                type="text"
+                                name="projectType"
+                                placeholder="Project Type"
+                                value={formData.projectType}
+                                onChange={handleInputChange}
+                                className="
+                                    w-full bg-white
+                                    border border-[rgba(255,255,255,0.5)] rounded-[0.5em]
+                                    px-[1.25em] h-[2.5em] md:h-[2.75em]
+                                    text-[#333] placeholder:text-[#333]/40
+                                    focus:outline-none focus:bg-white
+                                    focus:border-[rgba(255,180,0,0.55)]
+                                    focus:shadow-[0_0_1.2em_rgba(255,180,0,0.28)]
+                                    transition-all duration-300 text-[0.875em] md:text-[1em]
+                                    font-['Calisto_MT','Georgia',serif]
+                                "
+                            />
 
-                            {/* Project Type */}
-                            <div style={{ marginBottom: '24px' }}>
-                                <input
-                                    type="text"
-                                    placeholder="Project Type"
-                                    className={inputClass}
-                                    style={{ paddingLeft: '1.25rem' }}
-                                />
-                            </div>
+                            <textarea
+                                name="message"
+                                placeholder="Message"
+                                rows={3}
+                                required
+                                value={formData.message}
+                                onChange={handleInputChange}
+                                className="
+                                    w-full bg-white
+                                    border border-[rgba(255,255,255,0.5)] rounded-[0.5em]
+                                    px-[1.25em] py-[0.5em] md:py-[0.75em]
+                                    text-[#333] placeholder:text-[#333]/40
+                                    focus:outline-none focus:bg-white
+                                    focus:border-[rgba(255,180,0,0.55)]
+                                    focus:shadow-[0_0_1.2em_rgba(255,180,0,0.28)]
+                                    transition-all duration-300 text-[0.875em] md:text-[1em]
+                                    resize-none min-h-[4em] md:min-h-[5em]
+                                    font-['Calisto_MT','Georgia',serif]
+                                "
+                            />
+                        </div>
 
-                            {/* Message */}
-                            <div style={{ marginBottom: '24px' }}>
-                                <textarea
-                                    rows={1}
-                                    placeholder="Message"
-                                    className="w-full bg-white/50 rounded-[5px] !px-4 md:!px-6 !pt-[8px] md:!pt-[16px] pb-1.5 md:pb-3 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed min-h-[30px] md:min-h-[52px]"
-                                    style={{ paddingLeft: '1.25rem' }}
-                                />
-                            </div>
+                        {/* Submit */}
+                        <motion.button
+                            type="submit"
+                            disabled={status === "submitting"}
+                            whileHover={{
+                                scale: 1.02,
+                                backgroundColor: "rgba(255,190,0,0.22)",
+                                boxShadow: "0 0.8em 1.8em rgba(255,170,0,0.3)",
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            style={{
+                                width: "7em",
+                                height: "2.5em",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                backgroundColor: "#ffffff",
+                                backdropFilter: "blur(2.2em)",
+                                WebkitBackdropFilter: "blur(2.2em)",
+                                border: "1px solid rgba(255,255,255,0.6)",
+                                color: "#000000",
+                                fontWeight: "700",
+                                fontSize: "0.75em",
+                                borderRadius: "0.5em",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.075em",
+                                boxShadow: "0 0.8em 2em rgba(255,255,255,0.4)",
+                                transition: "all 0.3s",
+                                cursor: "pointer",
+                                marginBottom: '1.5em',
+                            }}
+                        >
+                            {status === "submitting" ? "Submitting..." : "Submit"}
+                        </motion.button>
 
-                            <button
-                                type="submit"
-                                style={{ marginBottom: '32px' }}
-                                className="group flex w-max items-center justify-center min-w-[120px] md:min-w-[160px] h-[36px] md:h-[52px] px-8 md:px-14 bg-white/20 backdrop-blur-xl text-text font-black uppercase tracking-[0.2em] text-[10px] md:text-[14px] rounded-full border-none outline-none hover:bg-white/30 transition-all duration-300 hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:scale-[1.02] shadow-lg"
+                        {status === "success" && (
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-black font-medium flex items-center gap-2 text-sm"
+                                style={{
+                                    textShadow: '0 0 10px rgba(255, 180, 0, 0.8)',
+                                }}
                             >
-                                <span>Submit</span>
-                            </button>
+                                <span className="w-2 h-2 bg-black rounded-full animate-pulse shadow-[0_0_8px_rgba(255,180,0,0.8)]" />
+                                Thank you! We'll get back to you soon.
+                            </motion.p>
+                        )}
 
-                            {/* Success message */}
-                            {status === "success" && (
-                                <p className="mt-2 md:mt-4 text-accent text-[10px] md:text-xs uppercase tracking-[0.25em]">
-                                    Message sent — we'll reply within 24 hours.
-                                </p>
-                            )}
-                        </form>
-                    </motion.div>
+                        {status === "error" && (
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="text-red-500 font-medium text-sm"
+                            >
+                                Something went wrong. Please try again.
+                            </motion.p>
+                        )}
+                    </motion.form>
 
                     {/* Glassy Contact Details */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.5 }}
-                        className="mt-5 md:mt-6 w-full"
+                        className="mt-10 md:mt-12 w-full"
                         style={{
                             position: "relative",
                             zIndex: 10,
