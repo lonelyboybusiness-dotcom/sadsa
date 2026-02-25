@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { MapPin, Phone, Mail } from "lucide-react";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
 import DiagonalGallery from "./DiagonalGallery";
@@ -93,6 +94,11 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                 "h-[100dvh] w-screen flex items-center justify-start bg-background flex-shrink-0 relative overflow-hidden",
                 className,
             )}
+            style={{
+                // Reserve safe space for the fixed navbar so the heading never sits underneath it,
+                // even when the user zooms in or the viewport height shrinks.
+                paddingTop: 'max(80px, 10dvh)',
+            }}
         >
             {/* Glassy Background Decoration */}
             <div className="absolute top-[-10%] right-[-15%] md:right-[-20%] lg:right-[-15%] w-[140%] md:w-[120%] lg:w-[100%] h-[120%] pointer-events-none z-0 opacity-65 overflow-hidden flex items-center justify-end">
@@ -212,35 +218,61 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.5 }}
-                        className="mt-5 md:mt-6 bg-white/20 backdrop-blur-xl rounded-2xl px-4 py-5 md:px-6 md:py-6 shadow-xl"
+                        className="mt-5 md:mt-6 w-full"
+                        style={{
+                            position: "relative",
+                            zIndex: 10,
+                            isolation: "isolate",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "1em",
+                            padding: "1.25em 1.5em",
+                            width: "100%",
+                            borderRadius: "0.5em",
+                            background: "rgba(255, 255, 255, 0.45)",
+                            backdropFilter: "blur(2.5em) saturate(135%)",
+                            WebkitBackdropFilter: "blur(2.5em) saturate(135%)",
+                            border: "1px solid rgba(255,255,255,0.55)",
+                            boxShadow:
+                                "0 0.9em 2.2em -1em rgba(0,0,0,0.22), inset 0 0.08em 0 rgba(255,255,255,0.55)",
+                            overflow: "hidden",
+                        }}
                     >
-                        <div className="flex flex-col gap-4 text-[11px] md:text-xs tracking-[0.16em] text-black/70">
-                            <div className="flex flex-col gap-1">
-                                <span className="uppercase font-semibold text-[10px] md:text-[11px] tracking-[0.22em] text-black/60">
-                                    Call us
-                                </span>
-                                <span className="text-sm md:text-base font-bold text-black tracking-normal">
-                                    98198 86633
-                                </span>
-                            </div>
+                        {/* Glass shimmer layers */}
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                pointerEvents: "none",
+                                borderRadius: "inherit",
+                                background:
+                                    "linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.05) 60%)",
+                                opacity: 0.5,
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: "absolute",
+                                inset: 0,
+                                pointerEvents: "none",
+                                background:
+                                    "linear-gradient(135deg, rgba(255,255,255,0.8), transparent 60%, rgba(255,255,255,0.3))",
+                                opacity: 0.6,
+                            }}
+                        />
 
-                            <div className="flex flex-col gap-1">
-                                <span className="uppercase font-semibold text-[10px] md:text[11px] tracking-[0.22em] text-black/60">
-                                    Email us
-                                </span>
-                                <span className="text-xs md:text-sm font-bold text-black">
-                                    studio@aakritcinematic.in
-                                </span>
+                        <div style={{ position: "relative", display: 'flex', flexDirection: 'column', gap: '16px', paddingLeft: '4px' }}>
+                            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '11px', fontWeight: 500, color: 'rgba(0,0,0,0.7)', lineHeight: 1.5 }}>
+                                <MapPin style={{ width: '14px', height: '14px', flexShrink: 0, marginTop: '2px' }} strokeWidth={1.5} />
+                                <span>15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik Park, Chembur, Mumbai, Maharashtra 400071</span>
                             </div>
-
-                            <div className="flex flex-col gap-1">
-                                <span className="uppercase font-semibold text-[10px] md:text-[11px] tracking-[0.22em] text-black/60">
-                                    Visit us
-                                </span>
-                                <span className="text-[11px] md:text-xs font-medium text-black leading-relaxed">
-                                    15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik
-                                    Park, Chembur, Mumbai, Maharashtra 400071
-                                </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, color: '#000' }}>
+                                <Phone style={{ width: '14px', height: '14px', flexShrink: 0 }} strokeWidth={1.5} />
+                                <span>+91 98198 86633</span>
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, color: '#000' }}>
+                                <Mail style={{ width: '14px', height: '14px', flexShrink: 0 }} strokeWidth={1.5} />
+                                <span>studio@aakritcinematic.in</span>
                             </div>
                         </div>
                     </motion.div>
