@@ -65,7 +65,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
     const displayLogos = fetchedLogos;
 
     // Match the full-screen, centered panel behavior of other sections
-    const safeNav = isDesktop ? 'max(80px, 10dvh)' : isTablet ? 'max(90px, 13dvh)' : '64px';
+    const safeNav = isDesktop ? 'max(80px, 10dvh)' : isTablet ? 'max(90px, 13dvh)' : 'max(80px, 12dvh)';
     const safeMascot = isDesktop ? 'max(130px, 16dvh)' : isTablet ? 'max(110px, 14dvh)' : '90px';
 
     return (
@@ -146,7 +146,10 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
             </div>
 
             {/* Heading + Videos */}
-            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 mb-10">
+            <div
+                className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 mb-6 md:mb-10"
+                style={isMobile ? { transform: 'scale(0.85)', transformOrigin: 'top center', marginBottom: '-5%' } : undefined}
+            >
                 <div className="flex flex-col items-center justify-center text-center">
                     <div className="inline-flex flex-col items-center justify-center mb-[clamp(1.2rem,3vh,3rem)]">
                         <motion.h2
@@ -316,7 +319,10 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 <div className="w-full flex justify-center">
                     <div
                         className="relative h-[60px] md:h-[80px] bg-[#f59e0b] px-6 md:px-12 rounded-[30px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]"
-                        style={{ width: isMobile ? 'min(90vw, 500px)' : '1120px' }}
+                        style={{
+                            width: isMobile ? 'min(85vw, 400px)' : '1120px',
+                            transform: isMobile ? 'scale(0.9)' : 'none'
+                        }}
                     >
                         <div className="home-logo-wrapper">
                             {[0, 1, 2, 3, 4, 5].map((i) => (

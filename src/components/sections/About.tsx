@@ -50,20 +50,20 @@ const About = ({ id = 'about', className }: AboutProps) => {
        regardless of zoom level. max(80px, 10dvh) means:
        - On tall screens: 10dvh wins (scales nicely)
        - On any screen: never less than 80px (navbar always visible) */
-    const safeNav = isDesktop ? 'max(80px, 10dvh)' : isTablet ? 'max(90px, 13dvh)' : '70px';
+    const safeNav = isDesktop ? 'max(80px, 10dvh)' : isTablet ? 'max(90px, 13dvh)' : '80px';
     const safeMascot = isDesktop ? 'max(130px, 16dvh)' : isTablet ? 'max(110px, 14dvh)' : '90px';
 
     // All sizing is dvh-driven — no hardcoded px/rem font sizes.
     // Everything scales proportionally with the available viewport height.
     // Formula: font = N% of dvh, capped at a comfortable maximum.
     // At any zoom, dvh shrinks → font shrinks → content fits without scrolling.
-    const bodyFont = 'min(1.55dvh, 13px)';
-    const bodyLH = 'min(2.3dvh,  20px)';
-    const taglineFont = 'min(1.35dvh, 11px)';
-    const pGap = 'min(1dvh,    8px)';
-    const cardPadX = 'min(2.5dvh,  20px)';
-    const cardPadY = 'min(1.8dvh,  15px)';
-    const titleMargin = 'min(1.2dvh,  10px)';
+    const bodyFont = isMobile ? 'min(1.4dvh, 12px)' : 'min(1.75dvh, 16px)';
+    const bodyLH = isMobile ? 'min(2.0dvh, 16px)' : 'min(2.6dvh, 24px)';
+    const taglineFont = isMobile ? 'min(1.2dvh, 10px)' : 'min(1.55dvh, 14px)';
+    const pGap = isMobile ? 'min(0.8dvh, 6px)' : 'min(1.2dvh, 10px)';
+    const cardPadX = isMobile ? 'min(2.5dvh, 16px)' : 'min(3dvh, 24px)';
+    const cardPadY = isMobile ? 'min(1.5dvh, 12px)' : 'min(2.2dvh, 20px)';
+    const titleMargin = isMobile ? 'min(1dvh, 8px)' : 'min(1.5dvh, 12px)';
 
     return (
         <section
@@ -85,7 +85,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                 className="w-full relative z-10 flex flex-col items-center justify-center mx-auto"
                 style={{
                     // Wider container = fewer line wraps = fewer lines = fits better at short heights
-                    maxWidth: isDesktop ? 'min(68vw, 950px)' : isTablet ? '82vw' : '92vw',
+                    maxWidth: isDesktop ? 'min(72vw, 1050px)' : isTablet ? '86vw' : '95vw',
                     height: '100%',
                 }}
             >
@@ -118,7 +118,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                         }}>
                             <span style={{
                                 fontFamily: RETROICA,
-                                fontSize: isMobile ? '1.5rem' : 'clamp(1.8rem, 5.5vw, 6rem)',
+                                fontSize: isMobile ? 'clamp(1.2rem, 3.5dvh, 1.5rem)' : 'clamp(1.8rem, 5.5vw, 6rem)',
                                 letterSpacing: '-0.02em',
                                 color: '#FFFFFF',
                                 textTransform: 'lowercase',
@@ -135,7 +135,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                             </span>
                             <span style={{
                                 fontFamily: RETROICA,
-                                fontSize: isMobile ? '1.5rem' : 'clamp(1.8rem, 5.5vw, 6rem)',
+                                fontSize: isMobile ? 'clamp(1.2rem, 3.5dvh, 1.5rem)' : 'clamp(1.8rem, 5.5vw, 6rem)',
                                 color: '#FFFFFF',
                                 fontWeight: 400,
                                 textShadow: `
@@ -189,7 +189,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                             <div
                                 className="flex flex-col text-text/90 mx-auto w-full my-auto text-justify about-body-calisto"
                                 style={{
-                                    fontSize: bodyFont,
+                                    fontSize: isDesktop ? 'min(2.1dvh, 18px)' : bodyFont,
                                     lineHeight: bodyLH,
                                     fontFamily: CALISTO,
                                     fontWeight: 400,

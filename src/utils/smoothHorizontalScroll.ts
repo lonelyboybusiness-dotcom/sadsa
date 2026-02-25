@@ -124,6 +124,8 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
 
     function onTouchStart(e: TouchEvent) {
         if (window.innerWidth > 768) return;
+        // Ignore multi-touch (pinch-zoom, etc.) to keep logic stable.
+        if (e.touches.length !== 1) return;
 
         const targetEl = e.target as HTMLElement | null;
         // We no longer cancel immediately when starting on a scrollable area.
@@ -147,6 +149,7 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
 
     function onTouchMove(e: TouchEvent) {
         if (window.innerWidth > 768) return;
+        if (e.touches.length !== 1) return;
         if (!touchActive || touchCancelled) return;
 
         const moveX = e.touches[0].clientX;
@@ -188,23 +191,29 @@ export function createSmoothHorizontalScroller(container: HTMLElement) {
         const xDiff = touchStartX - touchEndX;
         const yDiff = touchStartY - touchEndY;
 
-        // Require a mostly-horizontal swipe and a minimum distance
-        if (!(Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 40)) {
+        const absX = Math.abs(xDiff);
+        const absY = Math.abs(yDiff);
+
+        // Require a mostly-horizontal swipe and a minimum distance.
+        // Threshold slightly lower to make repeated quick swipes more reliable.
+        if (!(absX > absY && absX > 25)) {
             return;
         }
 
         const sectionWidth = container.clientWidth || 1;
 
-        // Base index on where the gesture started so the movement is predictable.
-        const startIndex = Math.round(touchStartScrollLeft / sectionWidth);
-        let nextIndex = startIndex;
+        // Base index on the *current* scroll position so that if the previous
+        // auto-scroll was interrupted mid-way, we still move consistently
+        // forward/backward from where the user actually is.
+        const currentIndex = Math.round(container.scrollLeft / sectionWidth);
+        let nextIndex = currentIndex;
 
         if (xDiff > 0) {
             // Swiped left → next page
-            nextIndex = startIndex + 1;
+            nextIndex = currentIndex + 1;
         } else {
             // Swiped right → previous page
-            nextIndex = startIndex - 1;
+            nextIndex = currentIndex - 1;
         }
 
         const maxIndex = Math.max(
