@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import clsx from 'clsx';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import RetroicaFont from '../../assets/fonts/Retroica.ttf';
+import CalistoFont from '../../assets/fonts/Calisto.ttf';
 
 const RETROICA = '"Retroica", Georgia, serif';
 
@@ -33,6 +34,12 @@ const About = ({ id = 'about', className }: AboutProps) => {
             const s = document.createElement('style');
             s.id = 'retroica-font-face';
             s.textContent = `@font-face { font-family: 'Retroica'; src: url('${RetroicaFont}') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }`;
+            document.head.appendChild(s);
+        }
+        if (!document.getElementById('calisto-font-face')) {
+            const s = document.createElement('style');
+            s.id = 'calisto-font-face';
+            s.textContent = `@font-face { font-family: 'Calisto'; src: url('${CalistoFont}') format('truetype'); font-weight: normal; font-style: normal; font-display: swap; }`;
             document.head.appendChild(s);
         }
     }, []);
@@ -179,7 +186,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                                 className="flex flex-col text-text/90 mx-auto w-full my-auto text-justify"
                                 style={{
                                     ...bodySizeStyle,
-                                    fontFamily: RETROICA,
+                                    fontFamily: 'var(--font-calisto, "Calisto", sans-serif)',
                                     fontWeight: 100,
                                     letterSpacing: '0.02em',
                                     WebkitFontSmoothing: 'antialiased',
@@ -187,7 +194,7 @@ const About = ({ id = 'about', className }: AboutProps) => {
                                         paintOrder: 'stroke fill',
                                         WebkitTextStroke: '0.1px rgba(250, 204, 21, 0.4)',
                                     } : {}),
-                                    gap: isDesktop ? 'min(1.2vh, 1vw)' : isTablet ? 'min(1.5vh, 0.75rem)' : 'min(1vh, 0.3rem)'
+                                    gap: isDesktop ? 'min(2.5vh, 2vw)' : isTablet ? 'min(3vh, 1.5rem)' : 'min(2vh, 0.6rem)'
                                 }}
                             >
                                 <motion.p variants={itemVariants}>

@@ -10,7 +10,7 @@ interface ContactProps {
 }
 
 const inputClass =
-    "w-full h-[30px] md:h-[52px] bg-white/50 rounded-[5px] px-3 md:px-5 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200";
+    "w-full h-[30px] md:h-[52px] bg-white/50 rounded-[5px] !px-4 md:!px-6 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200";
 
 const Contact = ({ id = "contact", className }: ContactProps) => {
     const [status, setStatus] = useState<"idle" | "success">("idle");
@@ -152,6 +152,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                     type="text"
                                     placeholder="Name"
                                     className={inputClass}
+                                    style={{ paddingLeft: '1.25rem' }}
                                     required
                                 />
                             </div>
@@ -162,6 +163,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                     type="email"
                                     placeholder="Email"
                                     className={inputClass}
+                                    style={{ paddingLeft: '1.25rem' }}
                                     required
                                 />
                             </div>
@@ -172,6 +174,7 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                     type="text"
                                     placeholder="Project Type"
                                     className={inputClass}
+                                    style={{ paddingLeft: '1.25rem' }}
                                 />
                             </div>
 
@@ -180,7 +183,8 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                 <textarea
                                     rows={1}
                                     placeholder="Message"
-                                    className="w-full bg-white/50 rounded-[5px] px-3 md:px-5 py-1.5 md:py-3 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed min-h-[30px] md:min-h-[52px]"
+                                    className="w-full bg-white/50 rounded-[5px] !px-4 md:!px-6 !pt-[8px] md:!pt-[16px] pb-1.5 md:pb-3 text-[10px] md:text-sm text-text placeholder:text-muted/60 outline-none border-none backdrop-blur-sm transition-all duration-200 resize-none leading-relaxed min-h-[30px] md:min-h-[52px]"
+                                    style={{ paddingLeft: '1.25rem' }}
                                 />
                             </div>
 
@@ -197,15 +201,21 @@ const Contact = ({ id = "contact", className }: ContactProps) => {
                                 <div className="flex items-start gap-2 md:gap-3 text-[10px] md:text-base font-medium text-text/80 leading-tight md:leading-relaxed max-w-[95%] md:max-w-[90%]">
                                     <span>15-2, Vishwa Niwas, Third Floor, Chandrodaya CHS, Thakkar Bappa Colony Rd, Near Swastik Park, Chembur, Mumbai, Maharashtra 400071</span>
                                 </div>
-                                <div className="flex items-center gap-2 md:gap-3 text-xs md:text-xl font-bold text-black">
-                                    <span className="text-black">
-                                        +91 98198 86633
-                                    </span>
+                                <div className="flex flex-col mt-1 md:mt-2">
+                                    <span className="text-black text-xs md:text-sm font-medium mb-0.5">call us</span>
+                                    <div className="flex items-center gap-2 md:gap-3 text-[11px] md:text-base font-bold text-black">
+                                        <span className="text-black">
+                                            +91 98198 86633
+                                        </span>
+                                    </div>
                                 </div>
-                                <div className="flex items-center gap-2 md:gap-3 text-xs md:text-xl font-bold text-black">
-                                    <span className="text-black">
-                                        studio@aakritcinematic.in
-                                    </span>
+                                <div className="flex flex-col mt-1 md:mt-2">
+                                    <span className="text-black text-xs md:text-sm font-medium mb-0.5">email us</span>
+                                    <div className="flex items-center gap-2 md:gap-3 text-[11px] md:text-base font-bold text-black">
+                                        <span className="text-black">
+                                            studio@aakritcinematic.in
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 

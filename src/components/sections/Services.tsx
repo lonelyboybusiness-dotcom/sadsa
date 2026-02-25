@@ -76,8 +76,7 @@ const services = [
     },
     {
         id: 'story-boarding',
-        title: 'Story Boarding',
-        subtitle: 'and Concept Art',
+        title: 'Story Boardingand Concept Art',
         description: 'Expressive storyboards and bold concept art creations.',
         icon: storyBoardingIcon,
     },
@@ -93,34 +92,6 @@ interface ServiceItem {
 
 function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isMobile: boolean; isPhone: boolean }) {
     const cardRef = useRef<HTMLDivElement>(null);
-
-    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (isPhone) return;
-        const card = cardRef.current;
-        if (!card) return;
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
-        const dx = (x - cx) / cx;
-        const dy = (y - cy) / cy;
-        card.style.transform = `perspective(600px) rotateY(${dx * 6}deg) rotateX(${-dy * 6}deg) scale(1.04)`;
-        card.style.boxShadow = `${-dx * 8}px ${-dy * 8}px 28px rgba(255,140,0,0.10), 0 6px 22px rgba(0,0,0,0.22)`;
-    };
-
-    const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
-        (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(254, 168, 0, 0.7)';
-    };
-
-    const handlePointerLeave = (e: React.PointerEvent<HTMLDivElement>) => {
-        const card = cardRef.current;
-        if (card) {
-            card.style.transform = '';
-            card.style.boxShadow = '';
-        }
-        (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255, 255, 255, 0.35)';
-    };
 
     return (
         <motion.div
@@ -170,16 +141,13 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
                 position: 'relative',
                 overflow: 'visible',
             }}
-            onPointerMove={handlePointerMove}
-            onPointerEnter={handlePointerEnter}
-            onPointerLeave={handlePointerLeave}
         >
             {/* Icon — propagates cardHover from parent card on desktop/iPad, loops on phone */}
             <motion.div
                 className="service-icon"
                 variants={isPhone ? {
                     visible: {
-                        y: [0, -8, 0],
+                        y: [0, -4, 0],
                         filter: [
                             "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
                             "drop-shadow(0px 4px 14px rgba(254, 168, 0, 0.7)) drop-shadow(0px 0px 8px rgba(254, 168, 0, 0.4))",
@@ -194,7 +162,7 @@ function ServiceCard({ service, isMobile, isPhone }: { service: ServiceItem; isM
                         transition: { duration: 0.3, ease: "easeOut" }
                     },
                     cardHover: {
-                        y: -10,
+                        y: -5,
                         filter: "drop-shadow(0px 6px 18px rgba(254, 168, 0, 0.9)) drop-shadow(0px 0px 12px rgba(254, 168, 0, 0.55))",
                         transition: { duration: 0.3, ease: "easeOut" }
                     },

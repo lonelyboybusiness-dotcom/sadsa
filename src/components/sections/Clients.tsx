@@ -292,7 +292,7 @@ const Clients = ({ id = "clients", className }: ClientsProps) => {
                 </div>
 
                 {/* Orange Pill Container */}
-                <div className="mx-auto w-[90%] md:w-[75%] lg:w-[60%] mt-[2vh] md:mt-[4vh] max-w-5xl">
+                <div className="mx-auto w-[90%] md:w-[85%] lg:w-full mt-[2vh] md:mt-[4vh] max-w-[1200px]">
                     <div className="relative h-[60px] md:h-[80px] bg-[#f59e0b] px-6 md:px-12 rounded-[30px] md:rounded-full flex items-center overflow-hidden drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border-4 border-[#f59e0b]">
                         <div className="home-logo-wrapper">
                             {[0, 1, 2, 3, 4, 5].map((i) => (

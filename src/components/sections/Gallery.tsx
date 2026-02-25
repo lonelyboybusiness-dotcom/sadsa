@@ -366,7 +366,7 @@ const Gallery = ({ id = 'gallery', className }: GalleryProps) => {
                 <iframe
                   width="100%"
                   height="100%"
-                  src={`https://www.youtube.com/embed/${getYouTubeId(topVideo.youtube_url)}?${embedParams}`}
+                  src={`https://www.youtube.com/embed/${getYouTubeId(topVideo.youtube_url)}?${embedParams}&autoplay=1&mute=1&loop=1&playlist=${getYouTubeId(topVideo.youtube_url)}`}
                   title="Visual Diary Main"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

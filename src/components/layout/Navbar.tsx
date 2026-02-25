@@ -78,7 +78,7 @@ const Navbar = ({ isVisible = true }: NavbarProps) => {
                         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                         boxShadow:
                             isDesktop || isTablet
-                                ? '0 2px 0px 3px rgba(255, 255, 255, 0.65)'
+                                ? '0 0px 0px 3px rgba(255, 255, 255, 0.65)'
                                 : '0 1px 0px 3px rgba(255, 255, 255, 0.65)',
                     }}
                 >
